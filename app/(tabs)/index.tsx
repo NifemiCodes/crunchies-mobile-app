@@ -13,7 +13,7 @@ import Crunchies from "@/components/Crunchies";
 // backdrop blur -- X
 // drop shadow -- X
 // categories focus styles -- X
-// scroll view height issue -- done-ish
+// scroll view height issues -- done-ish
 // tab bar marker animation -- done-ish(a bit slow, check that out)
 
 const homeTab = () => {

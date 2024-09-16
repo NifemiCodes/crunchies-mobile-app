@@ -10,7 +10,7 @@ const Deal = ({ image, title, price }: Card) => {
       <View className="absolute top-[50%] bottom-2 left-2 right-2 bg-detailsBg px-2 pt-1 rounded-xl gap-y-[6px]" style={{}}>
         <View className="flex-row justify-between items-start">
           <Text className="text-white text-[14px] font-dmMed w-[70%]">{title}</Text>
-          <Image className="w-4 h-4" source={require("../assets/images/heart-full.png")} />
+          <Image className="w-4 h-4" source={require("../../assets/images/heart-full.png")} />
         </View>
 
         <View className="flex-row gap-x-1 items-start">
@@ -32,11 +32,11 @@ const HotDeals = () => {
 
       <View className="ml-5">
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ columnGap: 15 }}>
-          <Deal image={require("../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
-          <Deal image={require("../assets/images/roast-beef.png")} title="Roast beef with black pepper" price="8,000" />
-          <Deal image={require("../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
-          <Deal image={require("../assets/images/roast-beef.png")} title="Roast beef with black pepper" price="8,000" />
-          <Deal image={require("../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
+          <Deal image={require("../../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
+          <Deal image={require("../../assets/images/roast-beef.png")} title="Roast beef with black pepper" price="8,000" />
+          <Deal image={require("../../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
+          <Deal image={require("../../assets/images/roast-beef.png")} title="Roast beef with black pepper" price="8,000" />
+          <Deal image={require("../../assets/images/pancakes.png")} title="Viral stacking cake with honey" price="9,670" />
         </ScrollView>
       </View>
     </View>

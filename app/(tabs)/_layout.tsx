@@ -24,13 +24,13 @@ const TabLayout = () => {
 
   const moveMarker = (tabName: "home" | "fav" | "orders" | "profile" | null) => {
     if (tabName === "home") {
-      homeIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 300, easing: Easing.linear })));
+      homeIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "fav") {
-      favIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 300, easing: Easing.linear })));
+      favIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "orders") {
-      ordersIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 300, easing: Easing.linear })));
+      ordersIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "profile") {
-      ProfileIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 300, easing: Easing.linear })));
+      ProfileIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     }
 
     // switch (tabName) {

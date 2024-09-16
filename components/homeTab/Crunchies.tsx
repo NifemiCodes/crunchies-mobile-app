@@ -1,5 +1,5 @@
 import { View, Text, Image } from "react-native";
-import Heart from "./Heart";
+import Heart from "../Heart";
 
 interface Product {
   image: any;
@@ -12,7 +12,7 @@ const Product = ({ image, title, price, isHot }: Product) => {
   return (
     <View className="relative gap-y-[10px]">
       <View>
-        {isHot ? <Image className="absolute z-[1] w-[58px] h-5 top-[10px] left-[10px]" source={require("../assets/images/hot-deal.png")} /> : null}
+        {isHot ? <Image className="absolute z-[1] w-[58px] h-5 top-[10px] left-[10px]" source={require("../../assets/images/hot-deal.png")} /> : null}
         <Heart emptyClassname="absolute z-[1] w-5 h-5 top-[10px] right-[10px]" fullClassname="absolute z-[1] w-5 h-5 top-[12.5px] right-[8px]" />
         <Image className="w-[327px] h-40" source={image} />
       </View>
@@ -24,7 +24,7 @@ const Product = ({ image, title, price, isHot }: Product) => {
           <Text className="font-dmMed text-[14px]">{price}</Text>
 
           <View className="flex-row items-center gap-x-1">
-            <Image className="w-3 h-3" source={require("../assets/images/truck-icon.png")} />
+            <Image className="w-3 h-3" source={require("../../assets/images/truck-icon.png")} />
             <Text className="font-dm text-[12px] tracking-[-0.3px]">Free delivery</Text>
           </View>
         </View>
@@ -40,10 +40,10 @@ const Crunchies = () => {
 
       <View className="gap-y-4">
         <View>
-          <Product image={require("../assets/images/heavens-food.png")} title="The Heaven's Food" price="₦32,000" isHot={true} />
+          <Product image={require("../../assets/images/heavens-food.png")} title="The Heaven's Food" price="₦32,000" isHot={true} />
         </View>
         <View>
-          <Product image={require("../assets/images/sauce.png")} title="Veggie Delight Cheesesteak" price="₦8,000" isHot={false} />
+          <Product image={require("../../assets/images/sauce.png")} title="Veggie Delight Cheesesteak" price="₦8,000" isHot={false} />
         </View>
       </View>
     </View>

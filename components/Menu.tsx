@@ -1,7 +1,7 @@
 import { View, Text, Image } from "react-native";
-import AddButton from "../AddButton";
+import AddButton from "./AddButton";
 import { Card } from "@/app/_layout";
-import Heart from "../Heart";
+import Heart from "./Heart";
 
 const MenuItem = ({ image, title, price }: Card) => {
   return (
@@ -24,12 +24,12 @@ const Menu = () => {
   return (
     <View className="px-5 items-center gap-[15px]">
       <View className="flex-row justify-between">
-        <MenuItem image={require("../../assets/images/brown-rice.png")} title="Fried Brown Rice" price="₦5,000" />
-        <MenuItem image={require("../../assets/images/veggie-delight.png")} title="Veggie Delight CheeseSteak" price="₦3,200" />
+        <MenuItem image={require("../assets/images/brown-rice.png")} title="Fried Brown Rice" price="₦5,000" />
+        <MenuItem image={require("../assets/images/veggie-delight.png")} title="Veggie Delight CheeseSteak" price="₦3,200" />
       </View>
       <View className="flex-row justify-between">
-        <MenuItem image={require("../../assets/images/chicken-burger.png")} title="Chicken burger first delivery" price="₦5,000" />
-        <MenuItem image={require("../../assets/images/chicken-wrap.png")} title="Crunchies's Chicken wrap" price="₦5,000" />
+        <MenuItem image={require("../assets/images/chicken-burger.png")} title="Chicken burger first delivery" price="₦5,000" />
+        <MenuItem image={require("../assets/images/chicken-wrap.png")} title="Crunchies's Chicken wrap" price="₦5,000" />
       </View>
     </View>
   );

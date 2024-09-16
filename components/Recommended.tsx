@@ -26,10 +26,10 @@ const Recommended = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ columnGap: 16, paddingVertical: 2, paddingHorizontal: 10 }}>
-        <Dish image={require("../../assets/images/deccan.png")} title="Deccan Queen R..." price="₦5,000" />
-        <Dish image={require("../../assets/images/tiffins.png")} title="Mamoo's Tiffins" price="₦23,700" />
-        <Dish image={require("../../assets/images/deccan.png")} title="Deccan Queen R..." price="₦5,000" />
-        <Dish image={require("../../assets/images/tiffins.png")} title="Mamoo's Tiffins" price="₦23,700" />
+        <Dish image={require("../assets/images/deccan.png")} title="Deccan Queen R..." price="₦5,000" />
+        <Dish image={require("../assets/images/tiffins.png")} title="Mamoo's Tiffins" price="₦23,700" />
+        <Dish image={require("../assets/images/deccan.png")} title="Deccan Queen R..." price="₦5,000" />
+        <Dish image={require("../assets/images/tiffins.png")} title="Mamoo's Tiffins" price="₦23,700" />
       </ScrollView>
     </View>
   );

@@ -24,28 +24,28 @@ const Trending = () => {
 
       <View>
         <Platter
-          image={require("../../assets/images/grilled-fish.png")}
+          image={require("../assets/images/grilled-fish.png")}
           title="Grilled fish with spicy onion sauce with black roasted beef"
           price="12,700"
         />
       </View>
       <View>
         <Platter
-          image={require("../../assets/images/fruit-sandwich.png")}
+          image={require("../assets/images/fruit-sandwich.png")}
           title="Grilled fish with spicy onion sauce with black roasted beef"
           price="32,000"
         />
       </View>
       <View>
         <Platter
-          image={require("../../assets/images/grilled-fish.png")}
+          image={require("../assets/images/grilled-fish.png")}
           title="Grilled fish with spicy onion sauce with black roasted beef"
           price="12,700"
         />
       </View>
       <View>
         <Platter
-          image={require("../../assets/images/fruit-sandwich.png")}
+          image={require("../assets/images/fruit-sandwich.png")}
           title="Grilled fish with spicy onion sauce with black roasted beef"
           price="32,000"
         />

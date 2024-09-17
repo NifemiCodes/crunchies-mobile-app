@@ -13,7 +13,11 @@
         "buildType": "apk"
       }
     },
-    "production": {}
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_BASE_URL": "https://crunchies-mobile-app.onrender.com"
+      }
+    }
   },
   "submit": {
     "production": {}

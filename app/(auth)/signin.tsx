@@ -13,26 +13,32 @@ const signIn = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
-    setLoading(true);
-    const signinData = {
-      email: email,
-      password: password,
-    };
-    const res = await fetch(`${baseURL}/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(signinData),
-    });
-    const data = await res.json();
+    try {
+      setLoading(true);
+      const signinData = {
+        email: email,
+        password: password,
+      };
+      const res = await fetch(`${baseURL}/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signinData),
+      });
+      const data = await res.json();
 
-    if (data.status === "OK") {
-      const { token, userInfo } = data;
-      await storeData(token, userInfo);
+      if (data.status === "OK") {
+        const { token, userInfo } = data;
+        await storeData(token, userInfo);
+        setLoading(false);
+        router.replace("/");
+      } else {
+        setLoading(false);
+        Alert.alert("Error signing in", data.message);
+      }
+    } catch (err: any) {
       setLoading(false);
-      router.replace("/");
-    } else {
-      setLoading(false);
-      Alert.alert("Error signing in", data.message);
+      console.log(err);
+      Alert.alert("Error registering user", err.message);
     }
   };
 

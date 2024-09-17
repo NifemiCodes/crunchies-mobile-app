@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // use correct liked heart icon;
 //get default profile picture for profile screen;
 
-export const baseURL = "http://192.168.100.7:3000";
+export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export interface Card {
   image: any;
   title: string;

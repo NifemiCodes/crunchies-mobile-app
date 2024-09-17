@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "server-start": "nodemon server.js",
+    "server-start": "nodemon server/server.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",

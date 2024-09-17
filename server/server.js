@@ -17,8 +17,8 @@ app.use(express.json());
 
 // database
 mongoose
-  .connect("mongodb://localhost:27017/crunchies")
-  .then(console.log("connected to db successfully"))
+  .connect("mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies")
+  .then(() => console.log("connected to db successfully"))
   .catch((error) => {
     console.log("error connecting to database");
     throw new Error(error);

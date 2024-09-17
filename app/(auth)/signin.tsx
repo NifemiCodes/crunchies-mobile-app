@@ -38,7 +38,7 @@ const signIn = () => {
     } catch (err: any) {
       setLoading(false);
       console.log(err);
-      Alert.alert("Error registering user", err.message);
+      Alert.alert("Error signing in", err.message);
     }
   };
 

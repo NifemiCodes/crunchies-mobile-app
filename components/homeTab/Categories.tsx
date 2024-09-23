@@ -1,4 +1,4 @@
-import { Text, ScrollView, Image, Pressable } from "react-native";
+import { Text, ScrollView, Image, Pressable, View } from "react-native";
 
 interface Card {
   image: any;
@@ -24,17 +24,19 @@ const Category = ({ image, text }: Card) => {
 
 const Categories = () => {
   return (
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ columnGap: 8, paddingHorizontal: 20 }}>
-      <Category image={require("../../assets/images/burger-icon.png")} text={"All Food"} />
-      <Category image={require("../../assets/images/pizza-icon.png")} text={"Pizza"} />
-      <Category image={require("../../assets/images/cookie-icon.png")} text={"Cookies"} />
-      <Category image={require("../../assets/images/pastry-icon.png")} text={"pastry"} />
-      <Category image={require("../../assets/images/burger-icon.png")} text={"Italian"} />
-      <Category image={require("../../assets/images/pizza-icon.png")} text={"French Cuisine"} />
-      <Category image={require("../../assets/images/cookie-icon.png")} text={"Cakes"} />
-      <Category image={require("../../assets/images/pastry-icon.png")} text={"Sweets"} />
-      <Category image={require("../../assets/images/burger-icon.png")} text={"Mexican"} />
-    </ScrollView>
+    <View className="h-fit">
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ columnGap: 8, paddingHorizontal: 20 }}>
+        <Category image={require("../../assets/images/burger-icon.png")} text={"All Food"} />
+        <Category image={require("../../assets/images/pizza-icon.png")} text={"Pizza"} />
+        <Category image={require("../../assets/images/cookie-icon.png")} text={"Cookies"} />
+        <Category image={require("../../assets/images/pastry-icon.png")} text={"pastry"} />
+        <Category image={require("../../assets/images/burger-icon.png")} text={"Italian"} />
+        <Category image={require("../../assets/images/pizza-icon.png")} text={"French Cuisine"} />
+        <Category image={require("../../assets/images/cookie-icon.png")} text={"Cakes"} />
+        <Category image={require("../../assets/images/pastry-icon.png")} text={"Sweets"} />
+        <Category image={require("../../assets/images/burger-icon.png")} text={"Mexican"} />
+      </ScrollView>
+    </View>
   );
 };
 export default Categories;

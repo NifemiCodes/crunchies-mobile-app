@@ -1,5 +1,6 @@
 import { View, Text, Image } from "react-native";
 import Heart from "../Heart";
+import { ProductDataType } from "@/app/_layout";
 
 interface Product {
   image: any;
@@ -9,12 +10,19 @@ interface Product {
 }
 
 const Product = ({ image, title, price, isHot }: Product) => {
+  const productData: ProductDataType = {
+    productId: Date.now().toString(),
+    name: title,
+    image: image,
+    price: price,
+  };
+
   return (
-    <View className="relative gap-y-[10px]">
+    <View className="gap-y-[10px]">
       <View>
         {isHot ? <Image className="absolute z-[1] w-[58px] h-5 top-[10px] left-[10px]" source={require("../../assets/images/hot-deal.png")} /> : null}
-        <Heart emptyClassname="absolute z-[1] w-5 h-5 top-[10px] right-[10px]" fullClassname="absolute z-[1] w-5 h-5 top-[12.5px] right-[8px]" />
-        <Image className="w-[327px] h-40" source={image} />
+        <Heart productData={productData} heartStyles="absolute z-[1] w-5 h-5 top-[10px] right-[10px]" />
+        <Image className="relative w-[327px] h-40" source={image} />
       </View>
 
       <View className="gap-y-[2px]">

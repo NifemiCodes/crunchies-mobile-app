@@ -4,6 +4,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     value: {
+      _id: "",
       name: "",
       email: "",
       password: "",
@@ -11,9 +12,7 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      console.log("previous state -> ", state);
       state.value = action.payload;
-      console.log("new state -> ", state);
     },
   },
 });

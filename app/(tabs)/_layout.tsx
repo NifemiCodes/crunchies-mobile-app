@@ -32,25 +32,6 @@ const TabLayout = () => {
     } else if (tabName === "profile") {
       ProfileIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     }
-
-    // switch (tabName) {
-    //   case "home":
-    //     console.log("home");
-    //     homeIcon.current?.measureInWindow((x) => (left.value = x));
-    //     break;
-    //   case "fav":
-    //     console.log("fav");
-    //     favIcon.current?.measureInWindow((x) => (left.value = x));
-    //     break;
-    //   case "orders":
-    //     console.log("orders");
-    //     ordersIcon.current?.measureInWindow((x) => (left.value = x));
-    //     break;
-    //   case "profile":
-    //     console.log("profile");
-    //     () => ProfileIcon.current?.measureInWindow((x) => (left.value = x));
-    //     break;
-    // }
   };
 
   return (
@@ -94,9 +75,9 @@ const TabLayout = () => {
           }}
         />
 
-        {/* shopping bag */}
+        {/* cart screen */}
         <Tabs.Screen
-          name="shopping"
+          name="cart"
           options={{
             tabBarIcon: () => bagIcon,
             tabBarIconStyle: { top: "-60%" },

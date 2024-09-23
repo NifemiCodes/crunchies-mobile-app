@@ -16,8 +16,9 @@ const app = express();
 app.use(express.json());
 
 // database
+// remote conn str:- "mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies"
 mongoose
-  .connect("mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies")
+  .connect("mongodb://localhost:27017/crunchies")
   .then(() => console.log("connected to db successfully"))
   .catch((error) => {
     console.log("error connecting to database");
@@ -69,6 +70,36 @@ app.post("/signin", async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// add item to favourites
+app.post("/favourites/add", async (req, res) => {
+  try {
+    const { pid, uid } = req.body;
+    const foundUser = await user.findById(uid);
+    if (!foundUser.favourites.includes(pid)) {
+      foundUser.favourites.push(pid);
+      await foundUser.save();
+      res.status(200).json({ status: "OK" });
+    }
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// remove item from favourites
+app.delete("/favourites/remove", async (req, res) => {
+  const { uid, pid } = req.body;
+  try {
+    const foundUser = await user.findById(uid);
+    if (foundUser.favourites.includes(pid)) {
+      foundUser.favourites = foundUser.favourites.filter((el) => el !== pid);
+      await foundUser.save();
+      res.status(200).json({ status: "OK" });
+    }
+  } catch (error) {
     res.json({ status: "ERROR", message: error.message });
   }
 });

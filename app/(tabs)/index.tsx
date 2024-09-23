@@ -11,6 +11,9 @@ import Recommended from "@/components/homeTab/Recommended";
 import Crunchies from "@/components/homeTab/Crunchies";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/features/userSlice";
+import { setFavourites } from "@/features/favouritesSlice";
 
 // backdrop blur -- X
 // drop shadow -- X
@@ -20,10 +23,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const homeTab = () => {
   const [firstName, setFirstName] = useState("");
+  const dispatch = useDispatch();
   (async () => {
     try {
       const user = await AsyncStorage.getItem("user");
+      const favs = await AsyncStorage.getItem("favourites");
       const userObj = user && JSON.parse(user);
+      const parsedFavs = favs && JSON.parse(favs);
+      dispatch(setUser(userObj));
+      dispatch(setFavourites(parsedFavs));
       setFirstName(userObj.name.split(" ")[0]);
     } catch (error) {
       console.warn(error);
@@ -31,7 +39,7 @@ const homeTab = () => {
   })();
 
   return (
-    <SafeAreaView className="flex-[1] bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView contentContainerStyle={{ rowGap: 16, paddingBottom: "25%" }}>
         <Header userName={firstName} />
         <Location />

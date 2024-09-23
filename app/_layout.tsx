@@ -3,30 +3,42 @@ import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "../features/userSlice";
 import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import userReducer from "../features/userSlice";
+import favouritesReducer from "../features/favouritesSlice";
 
 //TO-DO:
 // complete input validation;
 // add slash eye icon for password Authinput;
-// implement proper user feedback system??
-// network timeout alert feature??
 // get correct facebook icon for welcome screen sign in option;
-// use correct liked heart icon;
-//get default profile picture for profile screen;
+// get default profile picture for profile screen;
+// fix home screen ui
 
-export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+// favourites list rendering;
+// storing the user data;
+// clear favourites on logout and set it back on sign in;
+
+//export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+export const baseURL = "http://192.168.43.103:3000";
 export interface Card {
   image: any;
   title: string;
   price?: string;
 }
 
+export interface Product {
+  id: string;
+  name: string;
+  image: any; // change this to string
+  price: string;
+}
+
 // redux store
 const store = configureStore({
   reducer: {
     user: userReducer,
+    favourites: favouritesReducer,
   },
 });
 export type AppStore = typeof store;

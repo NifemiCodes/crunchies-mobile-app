@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Image } from "react-native";
 
 const Promotions = () => {
-  const [banner, setBanner] = useState();
+  const [banner, setBanner] = useState<any>();
   const [num, setNum] = useState<number>(1);
 
   useEffect(() => {
@@ -24,20 +24,20 @@ const Promotions = () => {
   }, [banner, num]);
 
   return (
-    <View className="gap-[7px] px-5 items-center">
-      <Image className="w-[327px] h-[137px]" source={banner} />
+    <View className="gap-[7px] px-5 items-center w-auto">
+      <Image className="w-full h-[137px]" source={banner} />
 
-      <View className="flex-row gap-[7px]">
+      <View className="flex-row gap-[7px] w-auto">
         <View>
-          <Image className="w-[104px] h-[104px]" source={require("../../assets/images/offer-1.png")} />
+          <Image className="flex-1 h-[104px] aspect-square" source={require("../../assets/images/offer-1.png")} />
         </View>
 
         <View>
-          <Image className="w-[104px] h-[104px]" source={require("../../assets/images/offer-2.png")} />
+          <Image className="flex-1 h-[104px] aspect-square" source={require("../../assets/images/offer-2.png")} />
         </View>
 
         <View>
-          <Image className="w-[104px] h-[104px]" source={require("../../assets/images/offer-3.png")} />
+          <Image className="flex-1 h-[104px] aspect-square" source={require("../../assets/images/offer-3.png")} />
         </View>
       </View>
     </View>

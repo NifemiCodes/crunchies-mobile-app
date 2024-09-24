@@ -43,8 +43,10 @@ const register = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "OK") {
-          const { token, userInfo } = data;
-          storeData(token, userInfo);
+          const { token, userInfo, userFavourites } = data;
+          console.log("user favs: ", userFavourites);
+          // store in local storage
+          storeData(token, userInfo, userFavourites);
           setLoading(false);
           router.replace("/");
         } else {

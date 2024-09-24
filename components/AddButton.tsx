@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-const AddButton = () => {
+const AddButton = ({ moreStyles }: { moreStyles?: string }) => {
   const [count, setCount] = useState(0);
 
   const increment = () => {
@@ -12,7 +12,7 @@ const AddButton = () => {
   };
 
   return count > 0 ? (
-    <View className="flex-row justify-between items-center h-7 bg-red rounded-[6px]">
+    <View className={`flex-row justify-between items-center h-7 bg-red rounded-[6px] ${moreStyles}`}>
       <TouchableOpacity className="flex-1 h-7 justify-center items-center border-r border-r-whiteT border-solid" onPress={decrement}>
         <Image className="w-2" source={require("../assets/images/minus-icon.png")} />
       </TouchableOpacity>
@@ -24,7 +24,7 @@ const AddButton = () => {
       </TouchableOpacity>
     </View>
   ) : (
-    <TouchableOpacity className="border border-solid border-red rounded-[6px] h-7 justify-center items-center" onPress={increment}>
+    <TouchableOpacity className={`border border-solid border-red rounded-[6px] h-7 justify-center items-center ${moreStyles}`} onPress={increment}>
       <Text className="font-dm text-red">Add to bag</Text>
     </TouchableOpacity>
   );

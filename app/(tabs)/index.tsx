@@ -9,7 +9,7 @@ import HotDeals from "@/components/homeTab/HotDeals";
 import Trending from "@/components/homeTab/Trending";
 import Recommended from "@/components/homeTab/Recommended";
 import Crunchies from "@/components/homeTab/Crunchies";
-import { useState } from "react";
+import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/features/userSlice";
@@ -22,26 +22,30 @@ import { setFavourites } from "@/features/favouritesSlice";
 // tab bar marker animation -- done-ish(a bit slow, check that out)
 
 const homeTab = () => {
-  const [firstName, setFirstName] = useState("");
   const dispatch = useDispatch();
-  (async () => {
-    try {
-      const user = await AsyncStorage.getItem("user");
-      const favs = await AsyncStorage.getItem("favourites");
-      const userObj = user && JSON.parse(user);
-      const parsedFavs = favs && JSON.parse(favs);
-      dispatch(setUser(userObj));
-      dispatch(setFavourites(parsedFavs));
-      setFirstName(userObj.name.split(" ")[0]);
-    } catch (error) {
-      console.warn(error);
-    }
-  })();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const user = await AsyncStorage.getItem("user");
+        const favs = await AsyncStorage.getItem("favourites");
+        const userObj = user && JSON.parse(user);
+        const parsedFavs = favs && JSON.parse(favs);
+        console.log("user: ", userObj, "favs: ", parsedFavs);
+
+        // set global state values
+        dispatch(setUser(userObj));
+        dispatch(setFavourites(parsedFavs));
+      } catch (error) {
+        console.warn(error);
+      }
+    })();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView contentContainerStyle={{ rowGap: 16, paddingBottom: "25%" }}>
-        <Header userName={firstName} />
+        <Header />
         <Location />
         <Promotions />
         <Categories />

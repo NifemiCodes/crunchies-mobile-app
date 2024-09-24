@@ -20,7 +20,7 @@ import favouritesReducer from "../features/favouritesSlice";
 // clear favourites on logout and set it back on sign in;
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
-export const baseURL = "http://192.168.43.103:3000";
+export const baseURL = "http://192.168.100.7:3000";
 export interface Card {
   image: any;
   title: string;
@@ -44,10 +44,11 @@ const store = configureStore({
 export type AppStore = typeof store;
 export type RootState = ReturnType<AppStore["getState"]>;
 
-export const storeData = async (token: string, userData: object) => {
+export const storeData = async (token: string, userData: object, favs: string) => {
   try {
     await AsyncStorage.setItem("user-token", token);
     await AsyncStorage.setItem("user", JSON.stringify(userData));
+    await AsyncStorage.setItem("favourites", JSON.stringify(favs));
   } catch (error) {
     console.warn(error);
   }
@@ -66,11 +67,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [signedIn, setSignedIn] = useState<boolean>();
-  const [loaded] = useFonts({
-    "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
-    "DM-med": require("../assets/fonts/DMSans_18pt-Medium.ttf"),
-    "DM-bold": require("../assets/fonts/DMSans_18pt-Bold.ttf"),
-  });
 
   useEffect(() => {
     (async () => {
@@ -78,6 +74,12 @@ export default function RootLayout() {
       setSignedIn(authState);
     })();
   }, []);
+
+  const [loaded] = useFonts({
+    "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
+    "DM-med": require("../assets/fonts/DMSans_18pt-Medium.ttf"),
+    "DM-bold": require("../assets/fonts/DMSans_18pt-Bold.ttf"),
+  });
 
   useEffect(() => {
     if (loaded) {

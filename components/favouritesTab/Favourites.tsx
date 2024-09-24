@@ -1,17 +1,18 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, Product } from "@/app/_layout";
 import { products } from "@/products";
+import FavouriteItem from "./FavouriteItem";
 
 const Favourites = () => {
-  const favIds = useSelector((state: RootState) => state.favourites.value);
   const [productsList, setProductsList] = useState<(Product | undefined)[]>([]);
+  const favIds = useSelector((state: RootState) => state.favourites.value);
 
   useEffect(() => {
     (async () => {
-      const list = favIds.map((id) => products.find((product) => product.id === id));
-      setProductsList(list);
+      const favouritesList = favIds.map((id) => products.find((product) => product.id === id));
+      setProductsList(favouritesList);
     })();
   }, [favIds]);
 
@@ -20,16 +21,12 @@ const Favourites = () => {
       <Text className="font-dm text-[17px]">No Items Added</Text>
     </View>
   ) : (
-    <View>
+    <View className="flex-[1] mt-8">
       <FlatList
         data={productsList}
-        renderItem={({ item, index }) => (
-          <View key={index}>
-            <Image source={typeof item?.image === "string" ? { uri: item?.image } : item?.image} />
-            <Text>{item?.name}</Text>
-            <Text>{item?.price}</Text>
-          </View>
-        )}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => <FavouriteItem product={item} key={index} />}
+        contentContainerStyle={{ paddingBottom: "32%" }}
       />
     </View>
   );

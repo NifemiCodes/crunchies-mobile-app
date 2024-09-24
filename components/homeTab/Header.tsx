@@ -1,14 +1,20 @@
 import { View, Text, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/_layout";
-import { useEffect } from "react";
-import { router } from "expo-router";
+import { useEffect, useState } from "react";
 
-const Header = ({ userName }: { userName: string }) => {
+const Header = () => {
+  const [firstName, setFirstName] = useState("");
+  const user = useSelector((state: RootState) => state.user.value);
+
+  useEffect(() => {
+    setFirstName(user.name.split(" ")[0]);
+  }, []);
+
   return (
     <View className="flex-row justify-between items-center mt-5 px-5">
       <View>
-        <Text className="font-dmb text-[18px]">Hi {userName}</Text>
+        <Text className="font-dmb text-[18px]">Hi {firstName}</Text>
         <Text className="font-dm text-grey text-[14px]">It's lunch time!</Text>
       </View>
 

@@ -44,7 +44,12 @@ app.post("/register", async (req, res) => {
       const createdUser = await user.create(newUser);
       if (createdUser.name) {
         const userToken = createToken(createdUser._id);
-        res.json({ status: "OK", token: userToken, userInfo: createdUser });
+        const userObj = {
+          id: createdUser._id,
+          name: createdUser.name,
+          email: createdUser.email,
+        };
+        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: createdUser.favourites });
       }
     }
   } catch (error) {
@@ -61,7 +66,12 @@ app.post("/signin", async (req, res) => {
       const isCorrectPassword = await bcrypt.compare(password, dbUser.password);
       if (isCorrectPassword) {
         const userToken = createToken(dbUser._id);
-        res.json({ status: "OK", token: userToken, userInfo: dbUser });
+        const userObj = {
+          id: dbUser._id,
+          name: dbUser.name,
+          email: dbUser.email,
+        };
+        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: dbUser.favourites });
       } else {
         throw new Error("Incorrect password");
       }

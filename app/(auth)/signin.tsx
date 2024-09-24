@@ -27,8 +27,9 @@ const signIn = () => {
       const data = await res.json();
 
       if (data.status === "OK") {
-        const { token, userInfo } = data;
-        await storeData(token, userInfo);
+        const { token, userInfo, userFavourites } = data;
+        await storeData(token, userInfo, userFavourites);
+        console.log("user favs: ", userFavourites);
         setLoading(false);
         router.replace("/");
       } else {

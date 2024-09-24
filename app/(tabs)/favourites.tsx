@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBack from "@/components/HeaderWithBack";
 import Favourites from "@/components/favouritesTab/Favourites";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { baseURL } from "../_layout";
 
 const favourites = () => {
   return (

@@ -16,7 +16,7 @@ module.exports = {
         pink: "#E5667C",
         green: "#34C759",
         blue: "#3E73E2",
-        dullYellow: "#FE8359",
+        softYellow: "#fe83594d",
       },
       fontFamily: {
         dm: "DM-reg",

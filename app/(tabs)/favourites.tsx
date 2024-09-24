@@ -1,5 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBack from "@/components/HeaderWithBack";
 import Favourites from "@/components/favouritesTab/Favourites";

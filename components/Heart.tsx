@@ -41,54 +41,41 @@ const Heart = ({ productId, heartStyles }: HeartType) => {
     }
   };
 
-  //* like function
-  const likeItem = async () => {
-    // add to global state
-    dispatch(addFavourite(productId));
-
-    // add to local storage
-    updateLocalStorage("ADD", productId);
-
-    // send request to add to the database
+  //* update database favourites
+  const updateFavourites = async (action: "ADD" | "REMOVE", payload: { uid: string; pid: string }) => {
+    const url = `${baseURL}/favourites/${action === "ADD" ? "add" : "remove"}`;
     try {
-      const res = await fetch(`${baseURL}/favourites/add`, {
-        method: "POST",
+      const res = await fetch(url, {
+        method: action === "ADD" ? "POST" : "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pid: productId, uid: user.id }),
+        body: JSON.stringify({ pid: payload.pid, uid: payload.uid }),
       });
       const data = await res.json();
-      console.log(data);
       if (data.status === "ERROR") {
         throw new Error(data.message);
       }
+      return data;
     } catch (error: any) {
       console.warn(error.message);
     }
   };
 
+  //* like function
+  const likeItem = async () => {
+    dispatch(addFavourite(productId)); // add to global state
+    await updateLocalStorage("ADD", productId); // add to local storage
+    // send request to add to the database
+    const data = await updateFavourites("ADD", { pid: productId, uid: user.id });
+    console.log(data);
+  };
+
   //* remove like function
   const unLikeItem = async () => {
-    // remove from global state
-    dispatch(removeFavourite(productId));
-
-    // remove from local storage
-    updateLocalStorage("REMOVE", productId);
-
+    dispatch(removeFavourite(productId)); // remove from global state
+    await updateLocalStorage("REMOVE", productId); // remove from local storage
     // send request to delete from the database
-    try {
-      const res = await fetch(`${baseURL}/favourites/remove`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid: user.id, pid: productId }),
-      });
-      const data = await res.json();
-      console.log(data);
-      if (data.status === "ERROR") {
-        throw new Error(data.message);
-      }
-    } catch (error: any) {
-      console.warn(error.message);
-    }
+    const data = await updateFavourites("REMOVE", { pid: productId, uid: user.id });
+    console.log(data);
   };
 
   return favIds.includes(productId) ? (

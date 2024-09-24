@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userReducer from "../features/userSlice";
 import favouritesReducer from "../features/favouritesSlice";
+import cartCounterReducer from "../features/cartCounterSlice";
 
 //TO-DO:
 // complete input validation;
@@ -14,10 +15,7 @@ import favouritesReducer from "../features/favouritesSlice";
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
 // fix home screen ui
-
-// favourites list rendering;
 // storing the user data;
-// clear favourites on logout and set it back on sign in;
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const baseURL = "http://192.168.100.7:3000";
@@ -26,7 +24,6 @@ export interface Card {
   title: string;
   price?: string;
 }
-
 export interface Product {
   id: string;
   name: string;
@@ -39,11 +36,13 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     favourites: favouritesReducer,
+    cartCounter: cartCounterReducer,
   },
 });
 export type AppStore = typeof store;
 export type RootState = ReturnType<AppStore["getState"]>;
 
+// store data to local storage
 export const storeData = async (token: string, userData: object, favs: string) => {
   try {
     await AsyncStorage.setItem("user-token", token);
@@ -54,6 +53,7 @@ export const storeData = async (token: string, userData: object, favs: string) =
   }
 };
 
+// check user authentication state (signed in or signed out)
 export const checkAuthState = async () => {
   try {
     const token = await AsyncStorage.getItem("user-token");

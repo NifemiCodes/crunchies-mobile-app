@@ -1,7 +1,11 @@
-import { Redirect } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import HeaderWithBack from "@/components/HeaderWithBack";
 const shopping = () => {
-  return <Redirect href={"/(tabs)/"} />;
+  return (
+    <SafeAreaView className="flex-1 bg-white px-5 pt-5">
+      <HeaderWithBack headerText="Cart" />
+    </SafeAreaView>
+  );
 };
 export default shopping;
-const styles = StyleSheet.create({});

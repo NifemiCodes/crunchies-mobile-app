@@ -14,7 +14,7 @@ const Heart = ({ productId, heartStyles }: HeartType) => {
   const user = useSelector((state: RootState) => state.user.value);
   const favIds = useSelector((state: RootState) => state.favourites.value);
 
-  //* store the latest version of the favIds state array locally whenever there is a change to it;
+  //* store the latest version of the favIds state array locally;
   const updateLocalStorage = async (action: "ADD" | "REMOVE", payloadId: string) => {
     switch (action) {
       case "ADD":
@@ -64,18 +64,14 @@ const Heart = ({ productId, heartStyles }: HeartType) => {
   const likeItem = async () => {
     dispatch(addFavourite(productId)); // add to global state
     await updateLocalStorage("ADD", productId); // add to local storage
-    // send request to add to the database
-    const data = await updateFavourites("ADD", { pid: productId, uid: user.id });
-    console.log(data);
+    await updateFavourites("ADD", { pid: productId, uid: user.id }); // send request to add to the database
   };
 
   //* remove like function
   const unLikeItem = async () => {
     dispatch(removeFavourite(productId)); // remove from global state
     await updateLocalStorage("REMOVE", productId); // remove from local storage
-    // send request to delete from the database
-    const data = await updateFavourites("REMOVE", { pid: productId, uid: user.id });
-    console.log(data);
+    await updateFavourites("REMOVE", { pid: productId, uid: user.id }); // send request to delete from the database
   };
 
   return favIds.includes(productId) ? (

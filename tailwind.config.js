@@ -8,6 +8,7 @@ module.exports = {
         whiteT: "rgba(255, 255, 255, 0.3)",
         red: "#e90c31",
         redT: "rgba(239, 34, 6, 0.08)",
+        veryTRed: "rgba(233, 12, 49, 0.3)",
         grey: "#6b6b6b",
         lightGrey: "#f6f6f6",
         veryLightGrey: "#dedee0",

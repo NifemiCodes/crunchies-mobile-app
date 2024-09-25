@@ -93,7 +93,10 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Stack screenOptions={{ headerShown: false }}>{signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)/welcome" />}</Stack>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="walkthrough" />
+        {/* {signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)/welcome" />} */}
+      </Stack>
     </Provider>
   );
 }

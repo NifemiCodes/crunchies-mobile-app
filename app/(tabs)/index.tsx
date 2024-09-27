@@ -31,7 +31,7 @@ const homeTab = () => {
         const favs = await AsyncStorage.getItem("favourites");
         const userObj = user && JSON.parse(user);
         const parsedFavs = favs && JSON.parse(favs);
-        console.log("user: ", userObj, "favs: ", parsedFavs);
+        //console.log("user: ", userObj, "favs: ", parsedFavs);
 
         // set global state values
         dispatch(setUser(userObj));

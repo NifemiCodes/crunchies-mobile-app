@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 const Header = () => {
   const [firstName, setFirstName] = useState("");
   const user = useSelector((state: RootState) => state.user.value);
+  console.log(user);
 
   useEffect(() => {
     setFirstName(user.name.split(" ")[0]);
-  }, []);
+  });
 
   return (
     <View className="flex-row justify-between items-center mt-5 px-5">

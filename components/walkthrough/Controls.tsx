@@ -27,7 +27,7 @@ const Controls = ({ arrayLength, currentIndex, nextFunction, addContainerStyles 
 
       {/* next button */}
       <TouchableOpacity className="px-[10px]" onPress={nextFunction} hitSlop={5}>
-        <Text className="font-dmb text-[15.27px] text-red leading-5 tracking-[-0.31px]">Next</Text>
+        <Text className="font-dmb text-[15.27px] text-red leading-5 tracking-[-0.31px]">{currentIndex === arrayLength ? "Finish" : "Next"}</Text>
       </TouchableOpacity>
     </View>
   );

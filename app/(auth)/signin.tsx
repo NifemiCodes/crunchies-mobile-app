@@ -31,7 +31,7 @@ const signIn = () => {
         await storeData(token, userInfo, userFavourites);
         console.log("user favs: ", userFavourites);
         setLoading(false);
-        router.replace("/");
+        router.replace("/(tabs)/");
       } else {
         setLoading(false);
         Alert.alert("Error signing in", data.message);

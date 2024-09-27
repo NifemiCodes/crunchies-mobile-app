@@ -6,7 +6,7 @@ const Step = ({ image, subtitle, title, text }: walkthroughDataType) => {
 
   return (
     <View className="justify-center items-center gap-y-4 p-[40px]" style={{ width: screenWidth }}>
-      <Image source={image} className="w-full h-[50%]" />
+      <Image source={image} className="w-full h-[47.5%]" />
 
       {/* text */}
       <View className="gap-y-[23px]">

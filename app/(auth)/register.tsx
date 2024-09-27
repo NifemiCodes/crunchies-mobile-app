@@ -48,7 +48,7 @@ const register = () => {
           // store in local storage
           storeData(token, userInfo, userFavourites);
           setLoading(false);
-          router.replace("/");
+          router.replace("/(tabs)/");
         } else {
           setLoading(false);
           //router.replace("/(auth)/register");

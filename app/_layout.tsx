@@ -53,13 +53,28 @@ export const storeData = async (token: string, userData: object, favs: string) =
   }
 };
 
+// chack if this is the first launch of the app
+export const checkFirstLaunch = async () => {
+  try {
+    const user = await AsyncStorage.getItem("user");
+    return user ? false : true;
+  } catch (error: any) {
+    console.warn(error.message);
+  }
+};
+
+let firstLaunch: boolean | undefined;
+(async () => {
+  firstLaunch = await checkFirstLaunch();
+})();
+
 // check user authentication state (signed in or signed out)
 export const checkAuthState = async () => {
   try {
     const token = await AsyncStorage.getItem("user-token");
     return token ? true : false;
-  } catch (error) {
-    console.warn(error);
+  } catch (error: any) {
+    console.warn(error.message);
   }
 };
 
@@ -68,12 +83,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [signedIn, setSignedIn] = useState<boolean>();
 
-  useEffect(() => {
-    (async () => {
-      const authState = await checkAuthState();
-      setSignedIn(authState);
-    })();
-  }, []);
+  //useEffect(() => {
+  (async () => {
+    const authState = await checkAuthState();
+    setSignedIn(authState);
+  })();
+  //}, []);
 
   const [loaded] = useFonts({
     "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
@@ -82,7 +97,7 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && firstLaunch !== undefined) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
@@ -94,8 +109,7 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="walkthrough" />
-        {/* {signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="(auth)/welcome" />} */}
+        {firstLaunch ? <Stack.Screen name="walkthrough" /> : signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="index" />}
       </Stack>
     </Provider>
   );

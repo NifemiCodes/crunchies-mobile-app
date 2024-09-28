@@ -1,7 +1,7 @@
 import { View, Text, Image, FlatList } from "react-native";
 import AddButton from "../AddButton";
 import Heart from "../Heart";
-import { Product } from "@/app/_layout";
+import type { Product } from "@/app/_layout";
 import { products } from "./../../products";
 
 const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number }) => {
@@ -23,7 +23,7 @@ const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number 
         <Text className="font-dmMed text-[13px]">{product.price}</Text>
       </View>
       <View className="w-full self-center px-[10px] my-[10px]">
-        <AddButton />
+        <AddButton productId={product.id} />
       </View>
     </View>
   );

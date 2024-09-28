@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userReducer from "../features/userSlice";
 import favouritesReducer from "../features/favouritesSlice";
-import cartCounterReducer from "../features/cartCounterSlice";
+import cartReducer from "../features/cartSlice";
 
 //TO-DO:
 // complete input validation;
@@ -27,7 +27,7 @@ export interface Card {
 export interface Product {
   id: string;
   name: string;
-  image: any; // change this to string
+  image: any; // change this to string?
   price: string;
 }
 
@@ -36,7 +36,7 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     favourites: favouritesReducer,
-    cartCounter: cartCounterReducer,
+    cart: cartReducer,
   },
 });
 export type AppStore = typeof store;
@@ -100,7 +100,7 @@ export default function RootLayout() {
     if (loaded && firstLaunch !== undefined) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, firstLaunch]);
 
   if (!loaded) {
     return null;

@@ -1,13 +1,31 @@
-import { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-const AddButton = ({ moreStyles }: { moreStyles?: string }) => {
+import { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { incrementCartCount, decrementCartCount, updateItemCount, addToCart, removeFromCart } from "@/features/cartSlice";
+
+const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: string }) => {
   const [count, setCount] = useState(0);
+  const dispatch = useDispatch();
 
   const increment = () => {
     setCount((prev) => prev + 1);
+    const newCount = count + 1;
+    if (count === 0) {
+      dispatch(addToCart({ id: productId, productCount: newCount }));
+      dispatch(incrementCartCount());
+    } else {
+      dispatch(updateItemCount({ id: productId, productCount: newCount }));
+    }
   };
 
   const decrement = () => {
+    const newCount = count - 1;
+    if (newCount === 0) {
+      dispatch(removeFromCart({ id: productId }));
+      dispatch(decrementCartCount());
+    } else {
+      dispatch(updateItemCount({ id: productId, productCount: newCount }));
+    }
     setCount((prev) => (prev > 0 ? prev - 1 : 0));
   };
 

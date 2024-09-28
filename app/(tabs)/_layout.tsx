@@ -1,24 +1,33 @@
-import { Colors } from "@/constants/Colors";
 import { Tabs } from "expo-router";
+import { Image, StyleSheet, View, Text } from "react-native";
+import { Colors } from "@/constants/Colors";
 import { useRef } from "react";
-import { Image, StyleSheet, View } from "react-native";
 import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated";
-
-const bagIcon = (
-  <View className="bg-white rounded-full p-3 absolute">
-    <View
-      className="bg-red rounded-full h-[52px] w-[52px] justify-center items-center"
-      style={{ shadowColor: Colors.red, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.32, shadowRadius: 12, elevation: 10 }}>
-      <Image className="w-6 h-6" source={require("../../assets/images/bag-outline-white.png")} />
-    </View>
-  </View>
-);
+import { useSelector } from "react-redux";
+import { RootState } from "../_layout";
 
 const TabLayout = () => {
+  const cartCount = useSelector((state: RootState) => state.cart.value.cartCount);
+
   const homeIcon = useRef<Image>(null);
   const favIcon = useRef<Image>(null);
   const ordersIcon = useRef<Image>(null);
   const ProfileIcon = useRef<Image>(null);
+
+  const bagIcon = (
+    <View className="bg-white rounded-full p-3 absolute">
+      <View
+        className="relative bg-red rounded-full h-[52px] w-[52px] justify-center items-center"
+        style={{ shadowColor: Colors.red, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.32, shadowRadius: 12, elevation: 10 }}>
+        {cartCount > 0 ? (
+          <View className="absolute top-[-14%] left-[50%] bg-red w-6 h-6 justify-center items-center rounded-full" style={{ elevation: 4 }}>
+            <Text className="text-white font-dm text-[13px]">{cartCount}</Text>
+          </View>
+        ) : null}
+        <Image className="w-6 h-6" source={require("../../assets/images/bag-outline-white.png")} />
+      </View>
+    </View>
+  );
 
   const left = useSharedValue(10);
 

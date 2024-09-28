@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 const Header = () => {
   const [firstName, setFirstName] = useState("");
   const user = useSelector((state: RootState) => state.user.value);
-  console.log(user);
 
   useEffect(() => {
     setFirstName(user.name.split(" ")[0]);

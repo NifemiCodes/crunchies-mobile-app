@@ -1,16 +1,28 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { useEffect, useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { incrementCartCount, decrementCartCount, updateItemCount, addToCart, removeFromCart } from "@/features/cartSlice";
+import { cartProduct, RootState } from "@/app/_layout";
 
 const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: string }) => {
+  const cartProduct = useSelector((state: RootState) => state.cart.value.cartItems).find((item: cartProduct) => item.id === productId);
   const [count, setCount] = useState(0);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (cartProduct) {
+      const cp = cartProduct as unknown as cartProduct;
+      setCount(cp.productCount);
+    } else {
+      setCount(0);
+    }
+  }, [cartProduct]);
+
   const increment = () => {
-    setCount((prev) => prev + 1);
     const newCount = count + 1;
+    setCount(newCount);
     if (count === 0) {
+      // initial add to cart
       dispatch(addToCart({ id: productId, productCount: newCount }));
       dispatch(incrementCartCount());
     } else {
@@ -19,14 +31,15 @@ const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: 
   };
 
   const decrement = () => {
-    const newCount = count - 1;
+    const newCount = count > 0 ? count - 1 : 0;
+    setCount(newCount);
     if (newCount === 0) {
+      // final remove from cart
       dispatch(removeFromCart({ id: productId }));
       dispatch(decrementCartCount());
     } else {
       dispatch(updateItemCount({ id: productId, productCount: newCount }));
     }
-    setCount((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
   return count > 0 ? (

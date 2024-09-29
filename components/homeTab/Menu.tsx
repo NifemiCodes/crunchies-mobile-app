@@ -8,13 +8,7 @@ const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number 
   return (
     <View key={itemIndex} className="w-[50%] border border-lightGrey border-solid rounded-md overflow-hidden mb-[15px]">
       <View className="flex-[1] relative">
-        <Image
-          // remove the source conditional(they should all be url strings)
-          source={typeof product.image === "string" ? { uri: product.image, width: 183, height: 117 } : product.image}
-          className="flex-[1] w-full"
-          resizeMode="cover"
-          resizeMethod="scale"
-        />
+        <Image source={{ uri: product.image, width: 183, height: 117 }} className="flex-[1] w-full" resizeMode="cover" resizeMethod="scale" />
         <Heart productId={product.id} heartStyles="absolute z-[1] top-[5px] right-[5px]" />
       </View>
 

@@ -14,8 +14,6 @@ import cartReducer from "../features/cartSlice";
 // add slash eye icon for password Authinput;
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
-// fix home screen ui
-// storing the user data;
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const baseURL = "http://192.168.100.7:3000";
@@ -27,8 +25,12 @@ export interface Card {
 export interface Product {
   id: string;
   name: string;
-  image: any; // change this to string?
+  image: string;
   price: string;
+}
+export interface cartProduct {
+  id: string;
+  productCount: number;
 }
 
 // redux store

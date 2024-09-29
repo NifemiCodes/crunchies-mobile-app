@@ -19,7 +19,6 @@ const cartSlice = createSlice({
 
     addToCart: ({ value }, { payload }) => {
       value.cartItems.push(payload);
-      console.log(value.cartItems);
     },
 
     removeFromCart: ({ value }, { payload }) => {
@@ -34,7 +33,6 @@ const cartSlice = createSlice({
         productCount: payload.productCount,
       };
       value.cartItems[itemIndex] = newItem;
-      console.log(value.cartItems);
     },
   },
 });

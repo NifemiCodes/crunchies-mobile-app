@@ -17,7 +17,7 @@ const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number 
         <Text className="font-dmMed text-[13px]">{product.price}</Text>
       </View>
       <View className="w-full self-center px-[10px] my-[10px]">
-        <AddButton productId={product.id} />
+        <AddButton product={product} />
       </View>
     </View>
   );

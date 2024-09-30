@@ -21,8 +21,7 @@ mongoose
   .connect("mongodb://localhost:27017/crunchies")
   .then(() => console.log("connected to db successfully"))
   .catch((error) => {
-    console.log("error connecting to database");
-    throw new Error(error);
+    console.log("error connecting to database:", error.message);
   });
 
 /** API ROUTES */
@@ -108,6 +107,22 @@ app.delete("/favourites/remove", async (req, res) => {
       foundUser.favourites = foundUser.favourites.filter((el) => el !== pid);
       await foundUser.save();
       res.status(200).json({ status: "OK" });
+    }
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// set user favourites
+app.post("/setFavourites", async (req, res) => {
+  try {
+    const { uid, favourites } = req.body;
+    const response = await user.updateOne({ _id: uid }, { favourites: favourites }).exec();
+    console.log(response);
+    if (response.modifiedCount === 1) {
+      res.json({ status: "OK" });
+    } else {
+      throw new Error("error updating user");
     }
   } catch (error) {
     res.json({ status: "ERROR", message: error.message });

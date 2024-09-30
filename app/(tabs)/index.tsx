@@ -14,6 +14,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
+import { baseURL } from "../_layout";
+// import NetInfo from "@react-native-community/netinfo";
 
 // backdrop blur -- X
 // drop shadow -- X
@@ -24,6 +26,16 @@ import { setFavourites } from "@/features/favouritesSlice";
 const homeTab = () => {
   const dispatch = useDispatch();
 
+  // const syncDbFavouritesList = async (uid: string, favs: string[]) => {
+  //   const res = await fetch(`${baseURL}/setFavourites`, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ uid: uid, favourites: favs }),
+  //   });
+  //   const data = res.json();
+  //   console.log(data);
+  // };
+
   useEffect(() => {
     (async () => {
       try {
@@ -31,7 +43,12 @@ const homeTab = () => {
         const favs = await AsyncStorage.getItem("favourites");
         const userObj = user && JSON.parse(user);
         const parsedFavs = favs && JSON.parse(favs);
-        //console.log("user: ", userObj, "favs: ", parsedFavs);
+
+        // update db list if network connection is available
+        // const networkState = await NetInfo.fetch();
+        // if (networkState.isConnected) {
+        //   syncDbFavouritesList(userObj.id, parsedFavs);
+        // }
 
         // set global state values
         dispatch(setUser(userObj));

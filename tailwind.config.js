@@ -16,6 +16,7 @@ module.exports = {
         detailsBg: "rgba(31, 39, 45, 0.4)",
         pink: "#E5667C",
         green: "#34C759",
+        darkGreen: "#12B289",
         blue: "#3E73E2",
         softYellow: "#fe83594d",
       },

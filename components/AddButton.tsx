@@ -2,16 +2,18 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { incrementCartCount, decrementCartCount, updateItemCount, addToCart, removeFromCart } from "@/features/cartSlice";
-import { cartProduct, RootState } from "@/app/_layout";
+import { CartProduct, Product, RootState } from "@/app/_layout";
 
-const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: string }) => {
-  const cartProduct = useSelector((state: RootState) => state.cart.value.cartItems).find((item: cartProduct) => item.id === productId);
+const AddButton = ({ product, moreStyles }: { product: Product; moreStyles?: string }) => {
   const [count, setCount] = useState(0);
   const dispatch = useDispatch();
+  const cartProduct = useSelector((state: RootState) => state.cart.value.cartItems).find((item: CartProduct) => item.id === product.id);
 
+  // watch for whenever the product list is updated
+  // and set count to the updated product's count
   useEffect(() => {
     if (cartProduct) {
-      const cp = cartProduct as unknown as cartProduct;
+      const cp = cartProduct as unknown as CartProduct;
       setCount(cp.productCount);
     } else {
       setCount(0);
@@ -23,10 +25,10 @@ const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: 
     setCount(newCount);
     if (count === 0) {
       // initial add to cart
-      dispatch(addToCart({ id: productId, productCount: newCount }));
+      dispatch(addToCart({ ...product, productCount: newCount }));
       dispatch(incrementCartCount());
     } else {
-      dispatch(updateItemCount({ id: productId, productCount: newCount }));
+      dispatch(updateItemCount({ ...product, productCount: newCount }));
     }
   };
 
@@ -35,10 +37,10 @@ const AddButton = ({ productId, moreStyles }: { productId: string; moreStyles?: 
     setCount(newCount);
     if (newCount === 0) {
       // final remove from cart
-      dispatch(removeFromCart({ id: productId }));
+      dispatch(removeFromCart({ id: product.id }));
       dispatch(decrementCartCount());
     } else {
-      dispatch(updateItemCount({ id: productId, productCount: newCount }));
+      dispatch(updateItemCount({ id: product.id, productCount: newCount }));
     }
   };
 

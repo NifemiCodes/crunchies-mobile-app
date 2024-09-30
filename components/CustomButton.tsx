@@ -4,7 +4,7 @@ import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 interface CustomButtonType {
   text: string;
   btnFunction?: () => void;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const CustomButton = ({ text, btnFunction, isLoading }: CustomButtonType) => {

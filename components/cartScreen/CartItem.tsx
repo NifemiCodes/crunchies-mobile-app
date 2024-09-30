@@ -1,12 +1,10 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
-import { cartProduct } from "@/app/_layout";
-import { products } from "@/products";
+import { CartProduct } from "@/app/_layout";
 import { useDispatch } from "react-redux";
 import { decrementCartCount, removeFromCart, updateItemCount } from "@/features/cartSlice";
 
-const CartItem = ({ product }: { product: cartProduct }) => {
-  const foundProduct = products.find((_product) => _product.id === product.id);
+const CartItem = ({ product }: { product: CartProduct }) => {
   const [count, setCount] = useState(product.productCount);
   const dispatch = useDispatch();
 
@@ -36,14 +34,14 @@ const CartItem = ({ product }: { product: cartProduct }) => {
   return (
     <View className="flex-row items-center rounded-[10px] p-3 h-[90px] border border-veryLightGrey border-solid">
       {/* image */}
-      <Image className="flex-1 h-[100%] rounded-md" resizeMode="cover" source={{ uri: foundProduct?.image }} />
+      <Image className="flex-1 h-[100%] rounded-md" resizeMode="cover" source={{ uri: product.image }} />
 
       {/* info */}
       <View className="flex-[2] gap-y-2 ml-2">
-        <Text className="font-dmMed text-[14px] leading-6">{foundProduct?.name}</Text>
+        <Text className="font-dmMed text-[14px] leading-6">{product.name}</Text>
 
         <View className="flex-row justify-between items-center">
-          <Text className="font-dmMed text-[13px] text-grey">{foundProduct?.price}</Text>
+          <Text className="font-dmMed text-[13px] text-grey">{product.price}</Text>
 
           {/* controls */}
           <View className="flex-row gap-x-4">

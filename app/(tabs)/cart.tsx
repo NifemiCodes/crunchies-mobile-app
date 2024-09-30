@@ -1,4 +1,3 @@
-import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderWithBack from "@/components/HeaderWithBack";
 import Cart from "@/components/cartScreen/Cart";

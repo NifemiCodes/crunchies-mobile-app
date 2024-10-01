@@ -18,8 +18,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
 // sync db favourites data to local storage data
-// cart screen tab marker UI
-// cart item slide animation
 // orders screen
 // individual product screen
 // edit profile screen

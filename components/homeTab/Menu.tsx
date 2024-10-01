@@ -1,15 +1,19 @@
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Text, Image, FlatList, Pressable } from "react-native";
 import AddButton from "../AddButton";
 import Heart from "../Heart";
 import type { Product } from "@/app/_layout";
 import { products } from "./../../products";
+import { router } from "expo-router";
 
 const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number }) => {
   return (
-    <View key={itemIndex} className="w-[50%] border border-lightGrey border-solid rounded-md overflow-hidden mb-[15px]">
+    <Pressable
+      onPress={() => router.push(`/${product.id}`)}
+      key={itemIndex}
+      className="w-[50%] border border-lightGrey border-solid rounded-md overflow-hidden mb-[15px]">
       <View className="flex-[1] relative">
         <Image source={{ uri: product.image, width: 183, height: 117 }} className="flex-[1] w-full" resizeMode="cover" resizeMethod="scale" />
-        <Heart productId={product.id} heartStyles="absolute z-[1] top-[5px] right-[5px]" />
+        <Heart productId={product.id} heartStyles="w-5 h-5 absolute z-[1] top-[5px] right-[5px]" />
       </View>
 
       <View className="px-[10px] pt-[10px] w-full">
@@ -19,7 +23,7 @@ const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number 
       <View className="w-full self-center px-[10px] my-[10px]">
         <AddButton product={product} />
       </View>
-    </View>
+    </Pressable>
   );
 };
 

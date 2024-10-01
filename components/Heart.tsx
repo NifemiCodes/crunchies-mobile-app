@@ -82,14 +82,12 @@ const Heart = ({ productId, heartStyles }: HeartType) => {
   };
 
   return favIds.includes(productId) ? (
-    <TouchableOpacity
-      className={`bg-white h-5 w-5 rounded-full items-center justify-center ${heartStyles}`}
-      onPress={productId ? unLikeItem : () => null}>
+    <TouchableOpacity className={`bg-white rounded-full items-center justify-center ${heartStyles}`} onPress={productId ? unLikeItem : () => null}>
       <Image className="w-[51%] h-[50%] justify-self-center" source={require("../assets/images/heart-liked.png")} />
     </TouchableOpacity>
   ) : (
     <TouchableOpacity className={heartStyles} onPress={productId ? likeItem : () => null}>
-      <Image className="w-5 h-5" source={require("../assets/images/heart-icon.png")} />
+      <Image className="w-full h-full" source={require("../assets/images/heart-icon.png")} />
     </TouchableOpacity>
   );
 };

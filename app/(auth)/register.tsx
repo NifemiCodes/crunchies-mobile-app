@@ -5,7 +5,8 @@ import { useState } from "react";
 import AuthHeader from "@/components/auth/AuthHeader";
 import AuthInput from "@/components/auth/AuthInput";
 import CustomButton from "@/components/CustomButton";
-import { baseURL, storeData } from "../_layout";
+import { baseURL } from "../_layout";
+import { storeData } from "@/helpers";
 
 const register = () => {
   const [name, setName] = useState("");

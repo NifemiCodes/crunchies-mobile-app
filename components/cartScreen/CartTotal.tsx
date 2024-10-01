@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
-import CheckoutValue from "./checkoutValue";
+import CheckoutValue from "./CheckoutValue";
 import CustomButton from "../CustomButton";
 import { CartProduct } from "@/app/_layout";
 

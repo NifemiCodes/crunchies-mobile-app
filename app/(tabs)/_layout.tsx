@@ -2,19 +2,19 @@ import { Tabs } from "expo-router";
 import { Image, StyleSheet, View, Text } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useRef } from "react";
-import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
 
 const TabLayout = () => {
   const cartCount = useSelector((state: RootState) => state.cart.value.cartCount);
 
-  const homeIcon = useRef<Image>(null);
-  const favIcon = useRef<Image>(null);
-  const ordersIcon = useRef<Image>(null);
-  const ProfileIcon = useRef<Image>(null);
+  const homeIconRef = useRef<Image>(null);
+  const favIconRef = useRef<Image>(null);
+  const ordersIconRef = useRef<Image>(null);
+  const ProfileIconRef = useRef<Image>(null);
 
-  const bagIcon = (
+  const cartIcon = (
     <View className="bg-white rounded-full p-3 absolute">
       <View
         className="relative bg-red rounded-full h-[52px] w-[52px] justify-center items-center"
@@ -30,16 +30,21 @@ const TabLayout = () => {
   );
 
   const left = useSharedValue(10);
+  const visible = useSharedValue(true);
+
+  const markerAnimatedStyles = useAnimatedStyle(() => ({
+    display: visible.value ? "flex" : "none",
+  }));
 
   const moveMarker = (tabName: "home" | "fav" | "orders" | "profile" | null) => {
     if (tabName === "home") {
-      homeIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
+      homeIconRef.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "fav") {
-      favIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
+      favIconRef.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "orders") {
-      ordersIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
+      ordersIconRef.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     } else if (tabName === "profile") {
-      ProfileIcon.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
+      ProfileIconRef.current?.measureInWindow((x, y, width) => (left.value = withTiming(x - width / 2, { duration: 200, easing: Easing.linear })));
     }
   };
 
@@ -54,7 +59,7 @@ const TabLayout = () => {
               return focused ? (
                 <Image className="w-6 h-6" source={require("../../assets/images/home-filled.png")} />
               ) : (
-                <Image ref={homeIcon} className="w-6 h-6" source={require("../../assets/images/home-outline.png")} />
+                <Image ref={homeIconRef} className="w-6 h-6" source={require("../../assets/images/home-outline.png")} />
               );
             },
             tabBarIconStyle: { marginBottom: 5 },
@@ -73,7 +78,7 @@ const TabLayout = () => {
               return focused ? (
                 <Image className="w-6 h-6" source={require("../../assets/images/heart-filled.png")} />
               ) : (
-                <Image ref={favIcon} className="w-6 h-6" source={require("../../assets/images/heart-outline.png")} />
+                <Image ref={favIconRef} className="w-6 h-6" source={require("../../assets/images/heart-outline.png")} />
               );
             },
             tabBarIconStyle: { marginBottom: 5 },
@@ -88,9 +93,12 @@ const TabLayout = () => {
         <Tabs.Screen
           name="cart"
           options={{
-            tabBarIcon: () => bagIcon,
+            tabBarIcon: () => cartIcon,
             tabBarIconStyle: { top: "-60%" },
-            tabBarLabel: () => null,
+            tabBarLabel: ({ focused }) => {
+              focused ? (visible.value = false) : (visible.value = true);
+              return null;
+            },
           }}
         />
 
@@ -102,7 +110,7 @@ const TabLayout = () => {
               return focused ? (
                 <Image className="w-6 h-6" source={require("../../assets/images/orders-filled.png")} />
               ) : (
-                <Image ref={ordersIcon} className="w-6 h-6" source={require("../../assets/images/orders-outline.png")} />
+                <Image ref={ordersIconRef} className="w-6 h-6" source={require("../../assets/images/orders-outline.png")} />
               );
             },
             tabBarIconStyle: { marginBottom: 5 },
@@ -121,7 +129,7 @@ const TabLayout = () => {
               return focused ? (
                 <Image className="w-6 h-6" source={require("../../assets/images/profile-filled.png")} />
               ) : (
-                <Image ref={ProfileIcon} className="w-6 h-6" source={require("../../assets/images/profile-outline.png")} />
+                <Image ref={ProfileIconRef} className="w-6 h-6" source={require("../../assets/images/profile-outline.png")} />
               );
             },
             tabBarIconStyle: { marginBottom: 5 },
@@ -133,7 +141,11 @@ const TabLayout = () => {
         />
       </Tabs>
 
-      <Animated.Image className={`w-[50.62px] h-[13px] absolute bottom-0`} style={{ left }} source={require("../../assets/images/tab-marker.png")} />
+      <Animated.Image
+        className={`w-[50.62px] h-[13px] absolute bottom-0`}
+        style={[{ left }, markerAnimatedStyles]}
+        source={require("../../assets/images/tab-marker.png")}
+      />
     </>
   );
 };

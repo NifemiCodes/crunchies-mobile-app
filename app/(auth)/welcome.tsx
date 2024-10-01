@@ -2,7 +2,7 @@ import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SignInOption from "@/components/auth/SignInOption";
 import { useEffect } from "react";
-import { checkAuthState } from "../_layout";
+import { checkAuthState } from "@/helpers";
 import { router } from "expo-router";
 
 const welcome = () => {

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import userReducer from "../features/userSlice";
 import favouritesReducer from "../features/favouritesSlice";
 import cartReducer from "../features/cartSlice";
+import { checkAuthState, checkFirstLaunch } from "@/helpers";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 //TO-DO:
 // UNCOMMENT NETINFO IMPORTS BEFORE REBUILDING
@@ -25,6 +26,7 @@ import cartReducer from "../features/cartSlice";
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const baseURL = "http://192.168.100.7:3000";
+
 export interface Card {
   image: any;
   title: string;
@@ -55,41 +57,10 @@ const store = configureStore({
 export type AppStore = typeof store;
 export type RootState = ReturnType<AppStore["getState"]>;
 
-// store data to local storage
-export const storeData = async (token: string, userData: object, favs: string) => {
-  try {
-    await AsyncStorage.setItem("user-token", token);
-    await AsyncStorage.setItem("user", JSON.stringify(userData));
-    await AsyncStorage.setItem("favourites", JSON.stringify(favs));
-  } catch (error) {
-    console.warn(error);
-  }
-};
-
-// chack if this is the first launch of the app
-export const checkFirstLaunch = async () => {
-  try {
-    const user = await AsyncStorage.getItem("user");
-    return user ? false : true;
-  } catch (error: any) {
-    console.warn(error.message);
-  }
-};
-
 let firstLaunch: boolean | undefined;
 (async () => {
   firstLaunch = await checkFirstLaunch();
 })();
-
-// check user authentication state (signed in or signed out)
-export const checkAuthState = async () => {
-  try {
-    const token = await AsyncStorage.getItem("user-token");
-    return token ? true : false;
-  } catch (error: any) {
-    console.warn(error.message);
-  }
-};
 
 SplashScreen.preventAutoHideAsync();
 
@@ -121,9 +92,11 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Stack screenOptions={{ headerShown: false }}>
-        {firstLaunch ? <Stack.Screen name="walkthrough" /> : signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="index" />}
-      </Stack>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false }}>
+          {firstLaunch ? <Stack.Screen name="walkthrough" /> : signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="index" />}
+        </Stack>
+      </GestureHandlerRootView>
     </Provider>
   );
 }

@@ -16,9 +16,8 @@ const app = express();
 app.use(express.json());
 
 // database
-// remote conn str:- "mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies"
 mongoose
-  .connect("mongodb://localhost:27017/crunchies")
+  .connect("mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies")
   .then(() => console.log("connected to db successfully"))
   .catch((error) => {
     console.log("error connecting to database:", error.message);
@@ -83,6 +82,49 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+// get user info
+app.get("/user/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dbRes = await user.findById(id);
+    console.log(dbRes);
+    if (dbRes) {
+      const userInfo = {
+        id: dbRes._id,
+        name: dbRes.name,
+        email: dbRes.email,
+      };
+      res.json({ status: "OK", user: userInfo });
+    }
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// edit user profile
+app.put("/profile/edit/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email } = req.body;
+    const foundUser = await user.findById(id);
+    if (foundUser) {
+      const updateRes = await user.updateOne({ _id: id }, { name: name || foundUser.name, email: email || foundUser.email }).exec();
+
+      // if update was successful, send user response
+      if (updateRes.modifiedCount === 1) {
+        const updatedUser = await user.findById(id);
+        res.json({ status: "OK", newUser: { id: updatedUser._id, name: updatedUser.name, email: updatedUser.email } });
+      } else {
+        throw new Error(updateRes);
+      }
+    } else {
+      throw new error("No user found");
+    }
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
 // add item to favourites
 app.post("/favourites/add", async (req, res) => {
   try {
@@ -118,11 +160,10 @@ app.post("/setFavourites", async (req, res) => {
   try {
     const { uid, favourites } = req.body;
     const response = await user.updateOne({ _id: uid }, { favourites: favourites }).exec();
-    console.log(response);
     if (response.modifiedCount === 1) {
       res.json({ status: "OK" });
     } else {
-      throw new Error("error updating user");
+      console.warn("error updating user");
     }
   } catch (error) {
     res.json({ status: "ERROR", message: error.message });

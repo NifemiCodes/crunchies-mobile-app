@@ -7,23 +7,22 @@ import { router } from "expo-router";
 
 const MenuItem = ({ product, itemIndex }: { product: Product; itemIndex: number }) => {
   return (
-    <Pressable
-      onPress={() => router.push(`/${product.id}`)}
-      key={itemIndex}
-      className="w-[50%] border border-lightGrey border-solid rounded-md overflow-hidden mb-[15px]">
+    <View key={itemIndex} className="w-[50%] border border-lightGrey border-solid rounded-md overflow-hidden mb-[15px]">
       <View className="flex-[1] relative">
-        <Image source={{ uri: product.image, width: 183, height: 117 }} className="flex-[1] w-full" resizeMode="cover" resizeMethod="scale" />
+        <Pressable className="flex-[1]" onPress={() => router.push(`/${product.id}`)}>
+          <Image source={{ uri: product.image, width: 183, height: 117 }} className="flex-[1] w-full" resizeMode="cover" resizeMethod="scale" />
+        </Pressable>
         <Heart productId={product.id} heartStyles="w-5 h-5 absolute z-[1] top-[5px] right-[5px]" />
       </View>
 
-      <View className="px-[10px] pt-[10px] w-full">
+      <Pressable onPress={() => router.push(`/${product.id}`)} className="px-[10px] pt-[10px] w-full">
         <Text className="font-dm text-[13px] min-h-[34px]">{product.name}</Text>
         <Text className="font-dmMed text-[13px]">{product.price}</Text>
-      </View>
+      </Pressable>
       <View className="w-full self-center px-[10px] my-[10px]">
         <AddButton product={product} />
       </View>
-    </Pressable>
+    </View>
   );
 };
 

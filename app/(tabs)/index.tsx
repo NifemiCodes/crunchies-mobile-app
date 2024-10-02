@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
 import { baseURL } from "../_layout";
-// import NetInfo from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo";
 
 // backdrop blur -- X
 // drop shadow -- X
@@ -26,15 +26,13 @@ import { baseURL } from "../_layout";
 const homeTab = () => {
   const dispatch = useDispatch();
 
-  // const syncDbFavouritesList = async (uid: string, favs: string[]) => {
-  //   const res = await fetch(`${baseURL}/setFavourites`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ uid: uid, favourites: favs }),
-  //   });
-  //   const data = res.json();
-  //   console.log(data);
-  // };
+  const syncDbFavouritesList = async (uid: string, favs: string[]) => {
+    await fetch(`${baseURL}/setFavourites`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: uid, favourites: favs }),
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -45,10 +43,12 @@ const homeTab = () => {
         const parsedFavs = favs && JSON.parse(favs);
 
         // update db list if network connection is available
-        // const networkState = await NetInfo.fetch();
-        // if (networkState.isConnected) {
-        //   syncDbFavouritesList(userObj.id, parsedFavs);
-        // }
+        const networkState = await NetInfo.fetch();
+        if (networkState.isConnected) {
+          syncDbFavouritesList(userObj.id, parsedFavs);
+        } else {
+          console.log("no internet connecton");
+        }
 
         // set global state values
         dispatch(setUser(userObj));

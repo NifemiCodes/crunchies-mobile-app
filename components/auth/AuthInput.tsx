@@ -5,13 +5,14 @@ import { View, Text, Image, TextInput, TouchableOpacity, KeyboardTypeOptions } f
 type AuthInputType = {
   labelTitle: string;
   inputIcon: any;
-  placeholderText: string;
+  placeholderText?: string;
   onChangeFunction: (text: string) => void;
+  value?: string;
   type?: "name" | "email" | "password" | "birthday" | "phone";
   boardType?: KeyboardTypeOptions;
 };
 
-const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction }: AuthInputType) => {
+const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction, value }: AuthInputType) => {
   const [isSecure, setIsSecure] = useState(true);
   const toggleSecure = () => {
     setIsSecure((prev) => !prev);
@@ -31,6 +32,7 @@ const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, on
           secureTextEntry={type === "password" ? isSecure : false}
           keyboardType={boardType}
           onChangeText={onChangeFunction}
+          value={value}
         />
         {type === "password" ? (
           <TouchableOpacity onPress={toggleSecure} hitSlop={5}>

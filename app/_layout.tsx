@@ -11,19 +11,15 @@ import { checkAuthState, checkFirstLaunch } from "@/helpers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 //TO-DO:
-// UNCOMMENT NETINFO IMPORTS BEFORE REBUILDING
-
 // complete input validation;
 // add slash eye icon for password Authinput;
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
-// sync db favourites data to local storage data
-// orders screen
 // individual product screen
-// edit profile screen
+// orders screen
 
-//export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
-export const baseURL = "http://192.168.100.7:3000";
+export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+//export const baseURL = "http://192.168.100.7:3000";
 
 export interface Card {
   image: any;

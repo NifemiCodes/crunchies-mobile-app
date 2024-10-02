@@ -3,7 +3,7 @@ import { baseURL, RootState } from "@/app/_layout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavourite, removeFavourite } from "@/features/favouritesSlice";
-//import NetInfo from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo";
 
 interface HeartType {
   productId: string;
@@ -65,20 +65,21 @@ const Heart = ({ productId, heartStyles }: HeartType) => {
   const likeItem = async () => {
     dispatch(addFavourite(productId)); // add to global state
     await updateLocalStorage("ADD", productId); // add to local storage
-    await updateFavourites("ADD", { pid: productId, uid: user.id }); // send request to add to the database
-    // const networkState = await NetInfo.fetch();
-    // if (networkState.isConnected) {
-    // }
+
+    const networkState = await NetInfo.fetch();
+    if (networkState.isConnected) {
+      await updateFavourites("ADD", { pid: productId, uid: user.id }); // send request to add to the database
+    }
   };
 
   //* remove like function
   const unLikeItem = async () => {
     dispatch(removeFavourite(productId)); // remove from global state
     await updateLocalStorage("REMOVE", productId); // remove from local storage
-    await updateFavourites("REMOVE", { pid: productId, uid: user.id }); // send request to delete from the database
-    // const networkState = await NetInfo.fetch();
-    // if (networkState.isConnected) {
-    // }
+    const networkState = await NetInfo.fetch();
+    if (networkState.isConnected) {
+      await updateFavourites("REMOVE", { pid: productId, uid: user.id }); // send request to delete from the database
+    }
   };
 
   return favIds.includes(productId) ? (

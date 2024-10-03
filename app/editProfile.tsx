@@ -15,6 +15,7 @@ const editProfile = () => {
   const user = useSelector((state: RootState) => state.user.value);
   const [newUserName, setNewUserName] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,12 +24,14 @@ const editProfile = () => {
   }, []);
 
   const editUserProfile = async () => {
+    setLoading(true);
     console.log(newUserName, newUserEmail);
     try {
       // check for network connection
       const networkState = await NetInfo.fetch();
 
       if (!networkState.isConnected) {
+        setLoading(false);
         Alert.alert("User Connection", "Please connect to the internet to complete this action");
       } else {
         // send request to update db;
@@ -45,8 +48,10 @@ const editProfile = () => {
           console.log("new user:", newUser);
           dispatch(setUser(newUser));
           await AsyncStorage.setItem("user", JSON.stringify(newUser));
-          Alert.alert("Update Successful!", "Profile was updated successfully!");
+          setLoading(false);
+          Alert.alert("Update Successful", "Profile was updated successfully!");
         } else {
+          setLoading(false);
           console.log(data.message);
           Alert.alert("Error updating user Information", data.message);
         }
@@ -84,7 +89,7 @@ const editProfile = () => {
         </View>
 
         <View className="mt-5">
-          <CustomButton text="Edit Profile" btnFunction={editUserProfile} />
+          <CustomButton text="Edit Profile" btnFunction={editUserProfile} isLoading={loading} />
         </View>
       </View>
     </SafeAreaView>

@@ -115,7 +115,7 @@ app.put("/profile/edit/:id", async (req, res) => {
         const updatedUser = await user.findById(id);
         res.json({ status: "OK", newUser: { id: updatedUser._id, name: updatedUser.name, email: updatedUser.email } });
       } else {
-        throw new Error(updateRes);
+        throw new Error("failed to update user");
       }
     } else {
       throw new error("No user found");

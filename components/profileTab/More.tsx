@@ -6,7 +6,7 @@ import { router } from "expo-router";
 const More = () => {
   const logout = async () => {
     try {
-      await AsyncStorage.multiRemove(["user-token", "favourites"]);
+      await AsyncStorage.multiRemove(["user-token", "user", "favourites"]);
       router.replace("/(auth)/welcome");
     } catch (error: any) {
       console.warn(error);

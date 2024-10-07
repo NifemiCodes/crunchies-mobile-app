@@ -1,17 +1,16 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import userReducer from "../features/userSlice";
 import favouritesReducer from "../features/favouritesSlice";
 import cartReducer from "../features/cartSlice";
-import { checkAuthState, checkFirstLaunch } from "@/helpers";
+import { checkFirstLaunch } from "@/helpers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 //TO-DO:
-// complete input validation;
 // add slash eye icon for password Authinput;
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
@@ -51,22 +50,17 @@ const store = configureStore({
 export type AppStore = typeof store;
 export type RootState = ReturnType<AppStore["getState"]>;
 
-let firstLaunch: boolean | undefined;
-(async () => {
-  firstLaunch = await checkFirstLaunch();
-})();
-
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [signedIn, setSignedIn] = useState<boolean>();
+  let firstLaunch: boolean | undefined;
 
-  //useEffect(() => {
-  (async () => {
-    const authState = await checkAuthState();
-    setSignedIn(authState);
-  })();
-  //}, []);
+  useEffect(() => {
+    (async () => {
+      firstLaunch = await checkFirstLaunch();
+      console.log(firstLaunch);
+    })();
+  }, []);
 
   const [loaded] = useFonts({
     "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
@@ -75,10 +69,10 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded && firstLaunch !== undefined) {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, firstLaunch]);
+  }, [loaded]);
 
   if (!loaded) {
     return null;
@@ -88,7 +82,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Stack screenOptions={{ headerShown: false }}>
-          {firstLaunch ? <Stack.Screen name="walkthrough" /> : signedIn ? <Stack.Screen name="(tabs)" /> : <Stack.Screen name="index" />}
+          {firstLaunch === false ? <Stack.Screen name="index" /> : <Stack.Screen name="walkthrough" />}
         </Stack>
       </GestureHandlerRootView>
     </Provider>

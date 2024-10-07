@@ -6,23 +6,24 @@ type AuthInputType = {
   labelTitle: string;
   inputIcon: any;
   placeholderText?: string;
-  onChangeFunction: (text: string) => void;
+  errorText?: string;
+  onChangeFunction?: (text: string) => void;
   value?: string;
   type?: "name" | "email" | "password" | "birthday" | "phone";
   boardType?: KeyboardTypeOptions;
 };
 
-const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction, value }: AuthInputType) => {
+const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction, value, errorText }: AuthInputType) => {
   const [isSecure, setIsSecure] = useState(true);
   const toggleSecure = () => {
     setIsSecure((prev) => !prev);
   };
 
   return (
-    <View>
+    <View className="mb-[10px]">
       <Text className="font-dmMed text-[14px]">{labelTitle}</Text>
 
-      <View className="mb-[21px] flex-row gap-x-2 items-center border-b border-veryLightGrey border-solid">
+      <View className="flex-row gap-x-2 items-center border-b border-veryLightGrey border-solid">
         <Image className="w-4 h-[18px]" source={inputIcon} />
         <TextInput
           className="flex-[2] font-dm text-[18px] p-[10px]"
@@ -40,6 +41,7 @@ const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, on
           </TouchableOpacity>
         ) : null}
       </View>
+      <Text className="font-dm text-red text-[13px] mt-1">{errorText}</Text>
     </View>
   );
 };

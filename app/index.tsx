@@ -1,5 +1,13 @@
+import { checkAuthState } from "@/helpers";
 import { Redirect } from "expo-router";
+import { useState } from "react";
 
 export default function Index() {
-  return <Redirect href={"/(auth)/welcome"} />;
+  const [signedIn, setSignedIn] = useState<boolean>();
+
+  (async () => {
+    const authState = await checkAuthState();
+    setSignedIn(authState);
+  })();
+  return signedIn ? <Redirect href={"/(tabs)/"} /> : <Redirect href={"/(auth)/welcome"} />;
 }

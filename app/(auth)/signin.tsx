@@ -2,24 +2,24 @@ import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { Link, router } from "expo-router";
+import { Formik } from "formik";
 import AuthHeader from "@/components/auth/AuthHeader";
 import AuthInput from "@/components/auth/AuthInput";
 import CustomButton from "@/components/CustomButton";
 import { baseURL } from "../_layout";
 import { storeData } from "@/helpers";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/features/userSlice";
+import { setFavourites } from "@/features/favouritesSlice";
+import { realUserSchema } from "./../../validations/signInForm";
 
 const signIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (signinData: { email: string; password: string }) => {
     try {
       setLoading(true);
-      const signinData = {
-        email: email,
-        password: password,
-      };
       const res = await fetch(`${baseURL}/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,8 +29,13 @@ const signIn = () => {
 
       if (data.status === "OK") {
         const { token, userInfo, userFavourites } = data;
+        // store data
         await storeData(token, userInfo, userFavourites);
-        console.log("user favs: ", userFavourites);
+
+        // update global state
+        dispatch(setUser(userInfo));
+        dispatch(setFavourites(userFavourites));
+
         setLoading(false);
         router.replace("/(tabs)/");
       } else {
@@ -48,30 +53,43 @@ const signIn = () => {
     <SafeAreaView className="flex-1 bg-white p-5">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
         <AuthHeader title="Sign In" />
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={realUserSchema}
+          onSubmit={async (values) => {
+            const result = await realUserSchema.isValid(values);
+            result ? handleSignIn(values) : Alert.alert("wrong or missing data", "Please fill in the form correctly");
+          }}>
+          {(props) => (
+            <View>
+              <AuthInput
+                labelTitle="Email Adress"
+                placeholderText="Enter your Email"
+                type="email"
+                boardType="email-address"
+                inputIcon={require("../../assets/images/input-email-image.png")}
+                onChangeFunction={props.handleChange("email")}
+                errorText={props.errors.email}
+              />
+              <AuthInput
+                labelTitle="Password"
+                placeholderText="Enter your Password"
+                type="password"
+                inputIcon={require("../../assets/images/input-padlock-image.png")}
+                onChangeFunction={props.handleChange("password")}
+                errorText={props.errors.password}
+              />
 
-        <AuthInput
-          labelTitle="Email Adress"
-          placeholderText="Enter your Email"
-          type="email"
-          boardType="email-address"
-          inputIcon={require("../../assets/images/input-email-image.png")}
-          onChangeFunction={(text) => setEmail(text)}
-        />
-        <AuthInput
-          labelTitle="Password"
-          placeholderText="Enter your Password"
-          type="password"
-          inputIcon={require("../../assets/images/input-padlock-image.png")}
-          onChangeFunction={(text) => setPassword(text)}
-        />
+              {/* <Link> */}
+              <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
+                <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
+              </TouchableOpacity>
+              {/* </Link> */}
 
-        {/* <Link> */}
-        <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
-          <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
-        </TouchableOpacity>
-        {/* </Link> */}
-
-        <CustomButton text="Sign In" btnFunction={handleSignIn} isLoading={loading} />
+              <CustomButton text="Sign In" btnFunction={props.handleSubmit} isLoading={loading} />
+            </View>
+          )}
+        </Formik>
 
         <View className="flex-row gap-x-1 justify-center mt-4">
           <Text className="font-dm text-grey text-[13px]">or</Text>

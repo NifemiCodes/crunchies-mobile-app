@@ -11,10 +11,10 @@ interface Product {
 const Product = ({ image, title, price, isHot }: Product) => {
   return (
     <View className="gap-y-[10px]">
-      <View>
+      <View className="relative w-full rounded-md overflow-hidden">
         {isHot ? <Image className="absolute z-[1] w-[58px] h-5 top-[10px] left-[10px]" source={require("../../assets/images/hot-deal.png")} /> : null}
         <Heart heartStyles="w-5 h-5 absolute z-[1] w-5 h-5 top-[10px] right-[10px]" />
-        <Image className="relative w-[327px] h-40" source={image} />
+        <Image className="w-full h-40" source={image} />
       </View>
 
       <View className="gap-y-[2px]">

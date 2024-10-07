@@ -2,44 +2,28 @@ import { View, Text, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import { useState } from "react";
+import { Formik } from "formik";
 import AuthHeader from "@/components/auth/AuthHeader";
 import AuthInput from "@/components/auth/AuthInput";
 import CustomButton from "@/components/CustomButton";
 import { baseURL } from "../_layout";
 import { storeData } from "@/helpers";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/features/userSlice";
+import { setFavourites } from "@/features/favouritesSlice";
+import { newUserSchema } from "./../../validations/registerForm";
 
 const register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [birthDay, setBirthDay] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const emailRegex = /^[a-z0-9]+@[a-z]+\.com$/;
-
-  // validate user input
-  const validateInput = () => {
-    if (name && emailRegex.test(email) && birthDay && password) {
-      handleRegister();
-    } else {
-      //router.replace("/(auth)/register");
-      Alert.alert("Wrong or missing data", "Please fill in the form appropriately");
-    }
-  };
+  const dispatch = useDispatch();
 
   // register user
-  const handleRegister = () => {
+  const handleRegister = (inputData: { name: string; email: string; password: string }) => {
     setLoading(true);
-    const userData = {
-      name: name,
-      email: email,
-      birthday: birthDay,
-      password: password,
-    };
     fetch(`${baseURL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(inputData),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -48,6 +32,9 @@ const register = () => {
           console.log("user favs: ", userFavourites);
           // store in local storage
           storeData(token, userInfo, userFavourites);
+          // update global state
+          dispatch(setUser(userInfo));
+          dispatch(setFavourites(userFavourites));
           setLoading(false);
           router.replace("/(tabs)/");
         } else {
@@ -68,45 +55,59 @@ const register = () => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
         <AuthHeader title="Register New Account" />
 
-        {/* name */}
-        <AuthInput
-          labelTitle="Full Name"
-          placeholderText="Enter your full name"
-          type="name"
-          inputIcon={require("../../assets/images/input-profile-image.png")}
-          onChangeFunction={(text) => setName(text)}
-        />
+        <Formik
+          initialValues={{ name: "", email: "", password: "" }}
+          validationSchema={newUserSchema}
+          onSubmit={async (values) => {
+            const result = await newUserSchema.isValid(values);
+            result ? handleRegister(values) : Alert.alert("Wrong or missing data", "Please fill in the form correctly");
+          }}>
+          {(props) => (
+            <View>
+              {/* name */}
+              <AuthInput
+                labelTitle="Full Name"
+                placeholderText="Enter your full name"
+                type="name"
+                inputIcon={require("../../assets/images/input-profile-image.png")}
+                onChangeFunction={props.handleChange("name")}
+                errorText={props.errors.name}
+              />
 
-        {/* email */}
-        <AuthInput
-          labelTitle="Email Adress"
-          placeholderText="Enter your Email"
-          type="email"
-          boardType="email-address"
-          inputIcon={require("../../assets/images/input-email-image.png")}
-          onChangeFunction={(text) => setEmail(text)}
-        />
+              {/* email */}
+              <AuthInput
+                labelTitle="Email Adress"
+                placeholderText="Enter your Email"
+                type="email"
+                boardType="email-address"
+                inputIcon={require("../../assets/images/input-email-image.png")}
+                onChangeFunction={props.handleChange("email")}
+                errorText={props.errors.email}
+              />
 
-        {/* birthday */}
-        <AuthInput
-          labelTitle="Birthday"
-          placeholderText="Enter your Birthday Date"
-          type="birthday"
-          boardType="number-pad"
-          inputIcon={require("../../assets/images/input-padlock-image.png")}
-          onChangeFunction={(text) => setBirthDay(text)}
-        />
+              {/* birthday */}
+              <AuthInput
+                labelTitle="Birthday"
+                placeholderText="Enter your Birthday Date"
+                type="birthday"
+                boardType="number-pad"
+                inputIcon={require("../../assets/images/input-padlock-image.png")}
+              />
 
-        {/* password */}
-        <AuthInput
-          labelTitle="Password"
-          placeholderText="Enter your Password"
-          type="password"
-          inputIcon={require("../../assets/images/input-padlock-image.png")}
-          onChangeFunction={(text) => setPassword(text)}
-        />
+              {/* password */}
+              <AuthInput
+                labelTitle="Password"
+                placeholderText="Enter your Password"
+                type="password"
+                inputIcon={require("../../assets/images/input-padlock-image.png")}
+                onChangeFunction={props.handleChange("password")}
+                errorText={props.errors.password}
+              />
 
-        <CustomButton text="Register account" btnFunction={validateInput} isLoading={loading} />
+              <CustomButton text="Register account" btnFunction={() => props.handleSubmit()} isLoading={loading} />
+            </View>
+          )}
+        </Formik>
 
         <View className="flex-row gap-x-1 self-center mt-[18px]">
           <Text className="font-dm text-[13px] text-grey">or</Text>

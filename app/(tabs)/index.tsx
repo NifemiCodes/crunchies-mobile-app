@@ -39,22 +39,22 @@ const homeTab = () => {
       try {
         const user = await AsyncStorage.getItem("user");
         const favs = await AsyncStorage.getItem("favourites");
-        const userObj = user && JSON.parse(user);
+        const parsedUser = user && JSON.parse(user);
         const parsedFavs = favs && JSON.parse(favs);
+
+        // set global state
+        if (user) {
+          dispatch(setUser(parsedUser));
+          dispatch(setFavourites(parsedFavs));
+        }
 
         // update db list if network connection is available
         const networkState = await NetInfo.fetch();
         if (networkState.isConnected) {
-          syncDbFavouritesList(userObj.id, parsedFavs);
-        } else {
-          console.log("no internet connecton");
+          await syncDbFavouritesList(parsedUser.id, parsedFavs);
         }
-
-        // set global state values
-        dispatch(setUser(userObj));
-        dispatch(setFavourites(parsedFavs));
-      } catch (error) {
-        console.warn(error);
+      } catch (error: any) {
+        console.log("error in index home tab", error.message);
       }
     })();
   }, []);

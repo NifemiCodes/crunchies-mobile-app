@@ -23,7 +23,7 @@ const Cart = () => {
       </View>
 
       {/* total */}
-      <CartTotal cartList={cartList} />
+      <CartTotal />
     </View>
   );
 };

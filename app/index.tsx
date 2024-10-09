@@ -9,5 +9,5 @@ export default function Index() {
     const authState = await checkAuthState();
     setSignedIn(authState);
   })();
-  return signedIn ? <Redirect href={"/(tabs)/"} /> : <Redirect href={"/(auth)/welcome"} />;
+  return signedIn ? <Redirect href={"/checkout"} /> : <Redirect href={"/(auth)/welcome"} />;
 }

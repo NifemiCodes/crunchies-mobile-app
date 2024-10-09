@@ -1,8 +1,8 @@
-import { Tabs } from "expo-router";
-import { Image, StyleSheet, View, Text } from "react-native";
+import { router, Tabs } from "expo-router";
+import { Image, StyleSheet, View, Text, Pressable } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { useRef } from "react";
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import React, { useRef } from "react";
+import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSelector } from "react-redux";
 import { RootState } from "../_layout";
 
@@ -15,7 +15,7 @@ const TabLayout = () => {
   const ProfileIconRef = useRef<Image>(null);
 
   const cartIcon = (
-    <View className="bg-white rounded-full p-3 absolute">
+    <Pressable onPress={() => router.push("/cart")} hitSlop={7} className="bg-white rounded-full p-3 absolute top-[-70%] left-[39%]">
       <View
         className="relative bg-red rounded-full h-[52px] w-[52px] justify-center items-center"
         style={{ shadowColor: Colors.red, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.32, shadowRadius: 12, elevation: 10 }}>
@@ -26,15 +26,10 @@ const TabLayout = () => {
         ) : null}
         <Image className="w-6 h-6" source={require("../../assets/images/bag-outline-white.png")} />
       </View>
-    </View>
+    </Pressable>
   );
 
   const left = useSharedValue(10);
-  const visible = useSharedValue(true);
-
-  const markerAnimatedStyles = useAnimatedStyle(() => ({
-    display: visible.value ? "flex" : "none",
-  }));
 
   const moveMarker = (tabName: "home" | "fav" | "orders" | "profile" | null) => {
     if (tabName === "home") {
@@ -81,7 +76,7 @@ const TabLayout = () => {
                 <Image ref={favIconRef} className="w-6 h-6" source={require("../../assets/images/heart-outline.png")} />
               );
             },
-            tabBarIconStyle: { marginBottom: 5 },
+            tabBarIconStyle: { marginBottom: 5, marginLeft: -20 },
             tabBarLabel: ({ focused }) => {
               focused ? moveMarker("fav") : null;
               return null;
@@ -91,14 +86,9 @@ const TabLayout = () => {
 
         {/* cart screen */}
         <Tabs.Screen
-          name="cart"
+          name="cartTab"
           options={{
-            tabBarIcon: () => cartIcon,
-            tabBarIconStyle: { top: "-60%" },
-            tabBarLabel: ({ focused }) => {
-              focused ? (visible.value = false) : (visible.value = true);
-              return null;
-            },
+            tabBarButton: () => cartIcon,
           }}
         />
 
@@ -113,7 +103,7 @@ const TabLayout = () => {
                 <Image ref={ordersIconRef} className="w-6 h-6" source={require("../../assets/images/orders-outline.png")} />
               );
             },
-            tabBarIconStyle: { marginBottom: 5 },
+            tabBarIconStyle: { marginBottom: 5, marginRight: -20 },
             tabBarLabel: ({ focused }) => {
               focused ? moveMarker("orders") : null;
               return null;
@@ -141,11 +131,7 @@ const TabLayout = () => {
         />
       </Tabs>
 
-      <Animated.Image
-        className={`w-[50.62px] h-[13px] absolute bottom-0`}
-        style={[{ left }, markerAnimatedStyles]}
-        source={require("../../assets/images/tab-marker.png")}
-      />
+      <Animated.Image className={`w-[50.62px] h-[13px] absolute bottom-0`} style={{ left }} source={require("../../assets/images/tab-marker.png")} />
     </>
   );
 };

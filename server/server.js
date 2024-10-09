@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const user = require("./models/user");
 const bcrypt = require("bcrypt");
 const { createToken } = require("./JWT");
+require("dotenv").config();
+const Paystack = require("paystack");
 // import express from "express";
 // import mongoose from "mongoose";
 // import user from "./models/user.js";
@@ -17,14 +19,19 @@ app.use(express.json());
 
 // database
 mongoose
-  .connect("mongodb+srv://nifemiakingba:qwF2jND4qGZwfMF5@cluster0.72xue.mongodb.net/crunchies")
+  .connect("mongodb://localhost:27017/crunchies")
   .then(() => console.log("connected to db successfully"))
   .catch((error) => {
     console.log("error connecting to database:", error.message);
   });
 
-/** API ROUTES */
+/** Paystack Routes */
+// initialize transaction
+app.post("/initialize", async (req, res) => {
+  const { email, amount } = req.body;
+});
 
+/** API ROUTES */
 // register
 app.post("/register", async (req, res) => {
   try {

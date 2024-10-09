@@ -17,6 +17,7 @@ module.exports = {
         pink: "#E5667C",
         green: "#34C759",
         darkGreen: "#12B289",
+        PODbg: "rgba(18, 178, 137, 0.1)",
         blue: "#3E73E2",
         softYellow: "#fe83594d",
       },
@@ -24,6 +25,9 @@ module.exports = {
         dm: "DM-reg",
         dmb: "DM-bold",
         dmMed: "DM-med",
+      },
+      dropShadow: {
+        checkout: "0px 3px 8px rgba(0, 0, 0, 0.05)",
       },
     },
   },

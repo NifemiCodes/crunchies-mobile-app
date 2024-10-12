@@ -12,19 +12,19 @@ import { checkFirstLaunch } from "@/helpers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 //TO-DO:
-// delete account function
 // orders screen
-// location function
 // date input
 // forgot password function
 // add slash eye icon for password Authinput;
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
-// individual product screen
 
+// delete account function --done
+// location function --done (only on the home screen);
 // cart tab route to new screen --done
 // total amount value --done
 // home screen header greeting time --done
+// individual product screen --done-ish
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const baseURL = "http://192.168.43.103:3000";
@@ -46,6 +46,12 @@ export interface CartProduct {
   image: string;
   price: string;
   productCount: number;
+}
+export interface UserLocation {
+  city: string | null;
+  name: string | null;
+  region: string | null;
+  street?: string | null;
 }
 
 // redux store

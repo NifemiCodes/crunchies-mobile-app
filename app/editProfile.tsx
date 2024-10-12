@@ -1,4 +1,4 @@
-import { View, Text, Alert } from "react-native";
+import { View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import HeaderWithBack from "@/components/HeaderWithBack";
@@ -49,7 +49,7 @@ const editProfile = () => {
           dispatch(setUser(newUser));
           await AsyncStorage.setItem("user", JSON.stringify(newUser));
           setLoading(false);
-          Alert.alert("Update Successful", "Profile was updated successfully!");
+          Alert.alert("Update Successful", "Your profile was updated successfully!");
         } else {
           setLoading(false);
           console.log(data.message);
@@ -76,7 +76,7 @@ const editProfile = () => {
             type="name"
             inputIcon={require("../assets/images/input-profile-image.png")}
             value={newUserName}
-            onChangeFunction={(text) => setNewUserName(text)}
+            onChangeFunction={text => setNewUserName(text)}
           />
           {/* <AuthInput labelTitle="Mobile Number" boardType="phone-pad" inputIcon={require("../assets/images/phone-icon-outlined.png")} /> */}
           <AuthInput
@@ -84,7 +84,7 @@ const editProfile = () => {
             boardType="email-address"
             inputIcon={require("../assets/images/input-email-image.png")}
             value={newUserEmail}
-            onChangeFunction={(text) => setNewUserEmail(text)}
+            onChangeFunction={text => setNewUserEmail(text)}
           />
         </View>
 

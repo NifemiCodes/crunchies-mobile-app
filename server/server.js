@@ -174,6 +174,22 @@ app.post("/setFavourites", async (req, res) => {
   }
 });
 
+// delete user's account
+app.delete("/user/delete", async (req, res) => {
+  const { id } = req.body;
+  try {
+    const dbResponse = await user.deleteOne({ _id: id }).exec();
+    if (dbResponse.deletedCount === 1) {
+      res.status(200).json({ status: "OK" });
+    } else {
+      throw new Error("failed to delete user account");
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

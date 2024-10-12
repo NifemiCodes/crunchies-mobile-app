@@ -22,7 +22,7 @@ const welcome = () => {
       <View>
         <SignInOption image={require("../../assets/images/google-icon.png")} text="Continue with Google" linkTo={"/(auth)/register"} />
         <SignInOption image={require("../../assets/images/facebook-icon.png")} text="Continue with Facebook" linkTo={"/(auth)/register"} />
-        <SignInOption image={require("../../assets/images/phone-icon.png")} text="Continue with Phone" linkTo={"/(auth)/continueWithPhone"} />
+        <SignInOption image={require("../../assets/images/phone-icon.png")} text="Continue with Phone" linkTo={"/(auth)/register"} />
         <SignInOption image={require("../../assets/images/email-icon.png")} text="Continue with Email" linkTo={"/(auth)/register"} />
       </View>
       <Text className="font-dm text-[13px] text-grey text-center mx-5 mt-5">

@@ -9,12 +9,12 @@ import HotDeals from "@/components/homeTab/HotDeals";
 import Trending from "@/components/homeTab/Trending";
 import Recommended from "@/components/homeTab/Recommended";
 import Crunchies from "@/components/homeTab/Crunchies";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
-import { baseURL } from "../_layout";
+import { baseURL, RootState } from "../_layout";
 import NetInfo from "@react-native-community/netinfo";
 
 // backdrop blur -- X
@@ -24,6 +24,9 @@ import NetInfo from "@react-native-community/netinfo";
 // tab bar marker animation -- done-ish(a bit slow, check that out)
 
 const homeTab = () => {
+  const user = useSelector((state: RootState) => state.user.value);
+  const [location, setLocation] = useState(null);
+  //const [errorMsg, setErrorMsg] = useState(null);
   const dispatch = useDispatch();
 
   const syncDbFavouritesList = async (uid: string, favs: string[]) => {
@@ -62,7 +65,7 @@ const homeTab = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView contentContainerStyle={{ rowGap: 16, paddingBottom: "25%" }}>
-        <Header />
+        <Header firstName={user.name.split(" ")[0]} />
         <Location />
         <Promotions />
         <Categories />

@@ -6,16 +6,19 @@ import SectionHeading from "@/components/checkout/SectionHeading";
 import HeaderWithBack from "@/components/HeaderWithBack";
 import PaymentMethod from "@/components/checkout/PaymentMethod";
 import TotalTable from "@/components/TotalTable";
-import CustomButton from "@/components/CustomButton";
+import CardDetailsModal from "./../components/checkout/CardDetailsModal";
 
 const checkout = () => {
   const [method, setMethod] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
   const chooseMethod = (methodName: "paystack" | "flutterwave" | "POD") => {
     setMethod(methodName);
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white p-5">
+      {modalVisible && <View className="absolute z-[1] top-0 right-0 bottom-0 left-0 bg-blackT"></View>}
       <ScrollView showsVerticalScrollIndicator={false}>
         <HeaderWithBack headerText="Check Out" />
 
@@ -50,12 +53,11 @@ const checkout = () => {
 
           <View className="mt-[39px] border-t border-t-veryLightGrey">
             <Text className="my-4 font-dmMed text-[16px]">Your Order</Text>
-
-            <TotalTable />
-
-            <CustomButton text="Make Payment" />
+            <TotalTable screen="checkout" makePaymentFunc={() => setModalVisible(true)} />
           </View>
         </View>
+
+        <CardDetailsModal isVisible={modalVisible} dismissFunction={() => setModalVisible(false)} paymentMethod={method} />
       </ScrollView>
     </SafeAreaView>
   );

@@ -20,6 +20,7 @@ module.exports = {
         PODbg: "rgba(18, 178, 137, 0.1)",
         blue: "#3E73E2",
         softYellow: "#fe83594d",
+        blackT: "rgba(0, 0, 0, 0.3)",
       },
       fontFamily: {
         dm: "DM-reg",

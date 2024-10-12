@@ -30,5 +30,3 @@ export const storeData = async (token: string, userData: object, favs: string) =
     console.warn(error);
   }
 };
-
-// checkout function

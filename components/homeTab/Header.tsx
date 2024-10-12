@@ -1,21 +1,25 @@
 import { View, Text, Image } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/_layout";
 import { useEffect, useState } from "react";
 
-const Header = () => {
-  const [firstName, setFirstName] = useState("");
-  const user = useSelector((state: RootState) => state.user.value);
+const Header = ({ firstName }: { firstName: string }) => {
+  const [meal, setMeal] = useState("");
 
   useEffect(() => {
-    setFirstName(user.name.split(" ")[0]);
-  });
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      setMeal("breakfast");
+    } else if (hour >= 12 && hour < 18) {
+      setMeal("lunch");
+    } else {
+      setMeal("dinner");
+    }
+  }, []);
 
   return (
     <View className="flex-row justify-between items-center mt-5 px-5">
       <View>
         <Text className="font-dmb text-[18px]">Hi {firstName}</Text>
-        <Text className="font-dm text-grey text-[14px]">It's lunch time!</Text>
+        <Text className="font-dm text-grey text-[14px]">{`It's ${meal} time!`}</Text>
       </View>
 
       <View className="rounded-full w-[40px] h-[40px] bg-redT flex justify-center items-center">

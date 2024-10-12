@@ -7,21 +7,24 @@ import { Provider } from "react-redux";
 import userReducer from "../features/userSlice";
 import favouritesReducer from "../features/favouritesSlice";
 import cartReducer from "../features/cartSlice";
+import checkoutReducer from "../features/checkoutSlice";
 import { checkFirstLaunch } from "@/helpers";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 //TO-DO:
+// delete account function
 // orders screen
-// cart tab route to new screen
 // location function
 // date input
-// total amount value
-// home screen header greeting time
 // forgot password function
 // add slash eye icon for password Authinput;
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
 // individual product screen
+
+// cart tab route to new screen --done
+// total amount value --done
+// home screen header greeting time --done
 
 //export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const baseURL = "http://192.168.43.103:3000";
@@ -51,6 +54,7 @@ const store = configureStore({
     user: userReducer,
     favourites: favouritesReducer,
     cart: cartReducer,
+    checkout: checkoutReducer,
   },
 });
 export type AppStore = typeof store;

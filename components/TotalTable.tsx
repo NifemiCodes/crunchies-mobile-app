@@ -1,19 +1,23 @@
 import { View, Text } from "react-native";
 import { useState, useEffect } from "react";
 import CheckoutValue from "./cartScreen/CheckoutValue";
+import CustomButton from "./CustomButton";
+import { router } from "expo-router";
 import type { CartProduct, RootState } from "@/app/_layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCheckoutCount, setCheckoutPrice } from "@/features/checkoutSlice";
 
-const TotalTable = () => {
+// convert price string to number
+export const priceToNumber = (price: string) => {
+  const numberPrice = price.replace(price[0], "").replaceAll(",", "");
+  return Number(numberPrice);
+};
+
+const TotalTable = ({ screen, makePaymentFunc }: { screen: "cart" | "checkout"; makePaymentFunc: () => void }) => {
   const cartList = useSelector((state: RootState) => state.cart.value.cartItems);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState<string>();
-
-  // convert price string to number
-  const priceToNumber = (price: string) => {
-    const numberPrice = price.replace(price[0], "").replaceAll(",", "");
-    return Number(numberPrice);
-  };
+  const dispatch = useDispatch();
 
   const numberToPrice = (value: number) => {
     const valueStr = value.toString();
@@ -36,12 +40,12 @@ const TotalTable = () => {
   // calculate total values
   const calcTotal = (list: CartProduct[]) => {
     // calculate the total number of items in the cart
-    const countsArray = list.map((item) => item.productCount);
+    const countsArray = list.map(item => item.productCount);
     const totalCount = countsArray.reduce((acc, curr) => acc + curr);
     setTotalItems(totalCount);
 
     // calculate the total cost of items in the cart
-    const pricesArray = list.map((item) => priceToNumber(item.price) * item.productCount);
+    const pricesArray = list.map(item => priceToNumber(item.price) * item.productCount);
     const priceTotal = pricesArray.reduce((acc, curr) => acc + curr);
     setTotalPrice(numberToPrice(priceTotal));
   };
@@ -50,8 +54,14 @@ const TotalTable = () => {
     calcTotal(cartList);
   }, [cartList]);
 
+  const handleCheckout = () => {
+    dispatch(setCheckoutCount(totalItems));
+    dispatch(setCheckoutPrice(totalPrice));
+    router.push("/checkout");
+  };
+
   return (
-    <View className="mb-5">
+    <View>
       <View className="gap-y-4 border-b border-b-solid border-b-veryLightGrey pb-4 mb-4">
         <View>
           <CheckoutValue name="Total Items" value={`${totalItems === 0 ? "00" : totalItems}`} />
@@ -67,10 +77,16 @@ const TotalTable = () => {
         </View>
       </View>
 
-      <View className="w-full flex-row items-center justify-between">
+      <View className="w-full mb-5 flex-row items-center justify-between">
         <Text className={"font-dmMed text-[16px] leading-5"}>Total Amount</Text>
         <Text className="font-dmMed text-[16px] leading-5">{totalPrice}</Text>
       </View>
+
+      {screen === "cart" ? (
+        <CustomButton text="Check Out" btnFunction={handleCheckout} />
+      ) : (
+        <CustomButton text="Make Payment" btnFunction={makePaymentFunc} />
+      )}
     </View>
   );
 };

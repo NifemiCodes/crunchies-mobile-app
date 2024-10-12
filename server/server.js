@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const user = require("./models/user");
 const bcrypt = require("bcrypt");
 const { createToken } = require("./JWT");
+const axios = require("axios");
 require("dotenv").config();
-const Paystack = require("paystack");
 // import express from "express";
 // import mongoose from "mongoose";
 // import user from "./models/user.js";
@@ -21,15 +21,12 @@ app.use(express.json());
 mongoose
   .connect("mongodb://localhost:27017/crunchies")
   .then(() => console.log("connected to db successfully"))
-  .catch((error) => {
+  .catch(error => {
     console.log("error connecting to database:", error.message);
   });
 
-/** Paystack Routes */
-// initialize transaction
-app.post("/initialize", async (req, res) => {
-  const { email, amount } = req.body;
-});
+/** Payment Routes */
+const baseURLPay = process.env.PAYSTACK_BASE_URL;
 
 /** API ROUTES */
 // register
@@ -153,7 +150,7 @@ app.delete("/favourites/remove", async (req, res) => {
   try {
     const foundUser = await user.findById(uid);
     if (foundUser.favourites.includes(pid)) {
-      foundUser.favourites = foundUser.favourites.filter((el) => el !== pid);
+      foundUser.favourites = foundUser.favourites.filter(el => el !== pid);
       await foundUser.save();
       res.status(200).json({ status: "OK" });
     }

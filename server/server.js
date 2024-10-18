@@ -4,13 +4,8 @@ const user = require("./models/user");
 const bcrypt = require("bcrypt");
 const { createToken } = require("./JWT");
 const axios = require("axios");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
-// import express from "express";
-// import mongoose from "mongoose";
-// import user from "./models/user.js";
-// import bcrypt from "bcrypt";
-// import { createToken } from "./JWT.js";
-// import token from "./models/token.js";
 
 const app = express();
 
@@ -26,7 +21,61 @@ mongoose
   });
 
 /** Payment Routes */
-const baseURLPay = process.env.PAYSTACK_BASE_URL;
+const baseURLPaystack = process.env.PAYSTACK_BASE_URL;
+
+// initialize transaction
+app.post("/payment/initialize", async (req, res) => {
+  const { email, amount } = req.body;
+  try {
+    const ax_res = await axios.post(
+      `${baseURLPaystack}/transaction/initialize`,
+      { email: email, amount: Number(amount) * 100 },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        },
+      }
+    );
+    res.status(200).send(ax_res.data);
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// payment webhook
+app.post("/paystack-webhook", (req, res) => {
+  const event = req.body;
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.MY_EMAIL,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.MY_EMAIL,
+    to: event.data.customer.email,
+    subject: "Crunchies Order Payment Success",
+    text: `This email is to inform you of successful payment via the Crunchies app.\n
+    Payment status: ${event.data.status}\n
+    Amount: ${event.data.amount / 100}\n
+    Paid with: ${event.data.channel} ${event.data.authorization.card_type} ${event.data.authorization.bank}\n
+    Time: ${new Date(event.data.paid_at).toDateString()} ${new Date(event.data.paid_at).toLocaleTimeString()}`,
+  };
+
+  if (event.data.status === "success") {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("error sending email", error.message);
+      } else {
+        console.log("email sent.", info.response);
+      }
+    });
+  }
+  res.status(200).send("OK");
+});
 
 /** API ROUTES */
 // register

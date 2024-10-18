@@ -61,7 +61,7 @@ const homeTab = () => {
           setUserPermission(response.granted);
         }
 
-        // perform network essential tasks if available
+        // update db favourites list if network connection is available
         const networkState = await NetInfo.fetch();
         if (networkState.isConnected) {
           await syncDbFavouritesList(parsedUser.id, parsedFavs);
@@ -84,7 +84,7 @@ const homeTab = () => {
         } catch (error: any) {
           console.log(error.message);
           setLocation("");
-          Alert.alert("Error fetching user location", "Please make sure you have network connection");
+          Alert.alert("Error fetching user location", error.message);
         }
       })();
     }

@@ -13,7 +13,13 @@ export const priceToNumber = (price: string) => {
   return Number(numberPrice);
 };
 
-const TotalTable = ({ screen, makePaymentFunc }: { screen: "cart" | "checkout"; makePaymentFunc: () => void }) => {
+interface TotalTableType {
+  screen: "cart" | "checkout";
+  makePaymentFunc?: () => void;
+  paymentIsLoading?: boolean;
+}
+
+const TotalTable = ({ screen, makePaymentFunc, paymentIsLoading }: TotalTableType) => {
   const cartList = useSelector((state: RootState) => state.cart.value.cartItems);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState<string>();
@@ -51,7 +57,9 @@ const TotalTable = ({ screen, makePaymentFunc }: { screen: "cart" | "checkout"; 
   };
 
   useEffect(() => {
-    calcTotal(cartList);
+    if (cartList.length !== 0) {
+      calcTotal(cartList);
+    }
   }, [cartList]);
 
   const handleCheckout = () => {
@@ -85,7 +93,7 @@ const TotalTable = ({ screen, makePaymentFunc }: { screen: "cart" | "checkout"; 
       {screen === "cart" ? (
         <CustomButton text="Check Out" btnFunction={handleCheckout} />
       ) : (
-        <CustomButton text="Make Payment" btnFunction={makePaymentFunc} />
+        <CustomButton text="Make Payment" btnFunction={makePaymentFunc} isLoading={paymentIsLoading} />
       )}
     </View>
   );

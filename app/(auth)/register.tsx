@@ -1,4 +1,4 @@
-import { View, Text, Alert, ScrollView } from "react-native";
+import { View, Text, Alert, ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import { useState } from "react";
@@ -12,10 +12,29 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
 import { newUserSchema } from "./../../validations/registerForm";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { date } from "yup";
 
 const register = () => {
+  const [showPicker, setShowPicker] = useState(false);
+  const [date, setDate] = useState<string>();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const togglePicker = () => {
+    setShowPicker(prev => !prev);
+  };
+
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+    const type = event.type;
+    console.log(type);
+    if (type === "set") {
+      setShowPicker(false);
+      setDate(selectedDate?.toLocaleDateString());
+    } else {
+      setShowPicker(false);
+    }
+  };
 
   // register user
   const handleRegister = (inputData: { name: string; email: string; password: string }) => {
@@ -25,8 +44,8 @@ const register = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(inputData),
     })
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.status === "OK") {
           const { token, userInfo, userFavourites } = data;
           console.log("user favs: ", userFavourites);
@@ -39,11 +58,10 @@ const register = () => {
           router.replace("/(tabs)/");
         } else {
           setLoading(false);
-          //router.replace("/(auth)/register");
           Alert.alert("Registration failed", data.message);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         setLoading(false);
         console.log(err);
         Alert.alert("Error registering user", err.message);
@@ -58,11 +76,11 @@ const register = () => {
         <Formik
           initialValues={{ name: "", email: "", password: "" }}
           validationSchema={newUserSchema}
-          onSubmit={async (values) => {
+          onSubmit={async values => {
             const result = await newUserSchema.isValid(values);
             result ? handleRegister(values) : Alert.alert("Wrong or missing data", "Please fill in the form correctly");
           }}>
-          {(props) => (
+          {props => (
             <View>
               {/* name */}
               <AuthInput
@@ -86,13 +104,20 @@ const register = () => {
               />
 
               {/* birthday */}
-              <AuthInput
-                labelTitle="Birthday"
-                placeholderText="Enter your Birthday Date"
-                type="birthday"
-                boardType="number-pad"
-                inputIcon={require("../../assets/images/input-padlock-image.png")}
-              />
+              <Pressable onPress={togglePicker}>
+                {showPicker && (
+                  <DateTimePicker value={new Date()} mode="date" display="calendar" onChange={handleDateChange} maximumDate={new Date()} />
+                )}
+                <AuthInput
+                  labelTitle="Birthday"
+                  placeholderText="Enter your Birthday Date"
+                  type="birthday"
+                  boardType="number-pad"
+                  inputIcon={require("../../assets/images/input-padlock-image.png")}
+                  value={date}
+                  isEditable={false}
+                />
+              </Pressable>
 
               {/* password */}
               <AuthInput

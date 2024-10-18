@@ -10,16 +10,6 @@ export const checkAuthState = async () => {
   }
 };
 
-// chack if this is the first launch of the app
-export const checkFirstLaunch = async () => {
-  try {
-    const user = await AsyncStorage.getItem("user");
-    return user ? false : true;
-  } catch (error: any) {
-    console.warn(error.message);
-  }
-};
-
 // store data to local storage
 export const storeData = async (token: string, userData: object, favs: string) => {
   try {

@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, KeyboardTypeOptions, Pressable } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, KeyboardTypeOptions } from "react-native";
 
 type AuthInputType = {
   labelTitle: string;
@@ -11,23 +11,18 @@ type AuthInputType = {
   value?: string;
   type?: "name" | "email" | "password" | "birthday" | "phone";
   boardType?: KeyboardTypeOptions;
+  isEditable?: boolean;
 };
 
-const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction, value, errorText }: AuthInputType) => {
+const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, onChangeFunction, value, errorText, isEditable }: AuthInputType) => {
   const [isSecure, setIsSecure] = useState(true);
-  const [showPicker, setShowPicker] = useState(false);
-  const [dateInput, setDateInput] = useState("");
 
   const toggleSecure = () => {
     setIsSecure(prev => !prev);
   };
 
-  const togglePicker = () => {
-    setShowPicker(prev => !prev);
-  };
-
   return (
-    <Pressable className="mb-[10px]">
+    <View className="mb-[10px]">
       <Text className="font-dmMed text-[14px]">{labelTitle}</Text>
 
       <View className="flex-row gap-x-2 items-center border-b border-veryLightGrey border-solid">
@@ -41,6 +36,7 @@ const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, on
           keyboardType={boardType}
           onChangeText={onChangeFunction}
           value={value}
+          editable={isEditable}
         />
         {type === "password" ? (
           <TouchableOpacity onPress={toggleSecure} hitSlop={5}>
@@ -49,7 +45,7 @@ const AuthInput = ({ labelTitle, inputIcon, placeholderText, type, boardType, on
         ) : null}
       </View>
       <Text className="font-dm text-red text-[13px] mt-1">{errorText}</Text>
-    </Pressable>
+    </View>
   );
 };
 export default AuthInput;

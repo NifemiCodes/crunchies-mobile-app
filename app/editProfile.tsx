@@ -25,7 +25,6 @@ const editProfile = () => {
 
   const editUserProfile = async () => {
     setLoading(true);
-    console.log(newUserName, newUserEmail);
     try {
       // check for network connection
       const networkState = await NetInfo.fetch();
@@ -45,14 +44,12 @@ const editProfile = () => {
         // update global state & local storage;
         if (data.status === "OK") {
           const { newUser } = data;
-          console.log("new user:", newUser);
           dispatch(setUser(newUser));
           await AsyncStorage.setItem("user", JSON.stringify(newUser));
           setLoading(false);
           Alert.alert("Update Successful", "Your profile was updated successfully!");
         } else {
           setLoading(false);
-          console.log(data.message);
           Alert.alert("Error updating user Information", data.message);
         }
       }

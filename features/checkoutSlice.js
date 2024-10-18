@@ -11,12 +11,10 @@ const checkoutSlice = createSlice({
   reducers: {
     setCheckoutPrice: ({ value }, { payload }) => {
       value.price = payload;
-      console.log(value.price);
     },
 
     setCheckoutCount: ({ value }, { payload }) => {
       value.count = payload;
-      console.log(value.count);
     },
   },
 });

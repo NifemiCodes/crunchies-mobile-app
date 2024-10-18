@@ -4,8 +4,6 @@ import { CartProduct, RootState } from "@/app/_layout";
 import CartItem from "./CartItem";
 import Coupon from "./Coupon";
 import TotalTable from "../TotalTable";
-import CustomButton from "../CustomButton";
-import { router } from "expo-router";
 
 const Cart = () => {
   const cartList: CartProduct[] = useSelector((state: RootState) => state.cart.value.cartItems);

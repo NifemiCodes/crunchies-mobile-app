@@ -6,6 +6,7 @@ const { createToken } = require("./JWT");
 const axios = require("axios");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+const ws = require("ws");
 
 const app = express();
 
@@ -16,20 +17,30 @@ app.use(express.json());
 mongoose
   .connect("mongodb://localhost:27017/crunchies")
   .then(() => console.log("connected to db successfully"))
-  .catch(error => {
+  .catch((error) => {
     console.log("error connecting to database:", error.message);
   });
+
+// websocket
+const webSocketServer = new ws.Server({ port: 8080 });
+webSocketServer.on("connection", () => {
+  console.log("wss connection");
+});
+
+webSocketServer.on("listening", () => {
+  console.log("wss is listening on port 8080");
+});
 
 /** Payment Routes */
 const baseURLPaystack = process.env.PAYSTACK_BASE_URL;
 
 // initialize transaction
 app.post("/payment/initialize", async (req, res) => {
-  const { email, amount } = req.body;
+  const { email, amount, callbackUrl, cancelUrl } = req.body;
   try {
     const ax_res = await axios.post(
       `${baseURLPaystack}/transaction/initialize`,
-      { email: email, amount: Number(amount) * 100 },
+      { email: email, amount: Number(amount) * 100, callback_url: callbackUrl, metadata: { cancel_action: cancelUrl } },
       {
         headers: {
           "Content-Type": "application/json",
@@ -46,6 +57,7 @@ app.post("/payment/initialize", async (req, res) => {
 // payment webhook
 app.post("/paystack-webhook", (req, res) => {
   const event = req.body;
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -74,6 +86,13 @@ app.post("/paystack-webhook", (req, res) => {
       }
     });
   }
+
+  // send payment status to frontend
+  const wsc = Array.from(webSocketServer.clients);
+  if (wsc[0].readyState === ws.OPEN) {
+    wsc[0].send(JSON.stringify({ paymentStatus: event.data.status }));
+  }
+
   res.status(200).send("OK");
 });
 
@@ -100,7 +119,7 @@ app.post("/register", async (req, res) => {
           name: createdUser.name,
           email: createdUser.email,
         };
-        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: createdUser.favourites });
+        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: createdUser.favourites, userOrders: createdUser.orders });
       }
     }
   } catch (error) {
@@ -122,7 +141,7 @@ app.post("/signin", async (req, res) => {
           name: dbUser.name,
           email: dbUser.email,
         };
-        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: dbUser.favourites });
+        res.json({ status: "OK", token: userToken, userInfo: userObj, userFavourites: dbUser.favourites, userOrders: dbUser.orders });
       } else {
         throw new Error("Incorrect password");
       }
@@ -131,6 +150,49 @@ app.post("/signin", async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// forgot password
+app.post("/password/forgot", async (req, res) => {
+  const { userEmail } = req.body;
+  try {
+    const genNumbers = [];
+    const maxDigits = 6;
+    for (let i = 0; i < maxDigits; i++) {
+      const num = Math.floor(Math.random() * 9);
+      genNumbers.push(num);
+    }
+    const code = genNumbers.join("");
+    console.log(code);
+
+    // send code to email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MY_EMAIL,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: "support@crunchiesclone.com",
+      to: userEmail,
+      subject: "Forgot Password - Crunchies",
+      text: `Enter the code below to reset your password:\n\n ${code}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        res.json({ status: "ERROR", message: error.message });
+        console.log("error sending email", error.message);
+      } else {
+        res.json({ status: "OK", message: info.response });
+        console.log("email sent.", info.response);
+      }
+    });
+  } catch (error) {
     res.json({ status: "ERROR", message: error.message });
   }
 });
@@ -199,7 +261,7 @@ app.delete("/favourites/remove", async (req, res) => {
   try {
     const foundUser = await user.findById(uid);
     if (foundUser.favourites.includes(pid)) {
-      foundUser.favourites = foundUser.favourites.filter(el => el !== pid);
+      foundUser.favourites = foundUser.favourites.filter((el) => el !== pid);
       await foundUser.save();
       res.status(200).json({ status: "OK" });
     }
@@ -217,6 +279,23 @@ app.post("/setFavourites", async (req, res) => {
       res.json({ status: "OK" });
     } else {
       console.warn("error updating user");
+    }
+  } catch (error) {
+    res.json({ status: "ERROR", message: error.message });
+  }
+});
+
+// add user's orders
+app.post("/orders/add", async (req, res) => {
+  const { uid, orders } = req.body;
+  try {
+    const foundUser = await user.findById(uid);
+    if (foundUser) {
+      orders.map((order) => foundUser.orders.push(order));
+      await foundUser.save();
+      res.json({ status: "OK" });
+    } else {
+      throw new Error("User does not exist");
     }
   } catch (error) {
     res.json({ status: "ERROR", message: error.message });

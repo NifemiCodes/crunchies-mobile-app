@@ -13,7 +13,7 @@ const More = () => {
 
   const logout = async () => {
     try {
-      await AsyncStorage.multiRemove(["user-token", "user", "favourites"]);
+      await AsyncStorage.multiRemove(["user-token", "user", "favourites", "orders"]);
       router.replace("/(auth)/welcome");
     } catch (error: any) {
       console.warn(error);
@@ -31,7 +31,7 @@ const More = () => {
       });
       const data = await res.json();
       if (data.status === "OK") {
-        await AsyncStorage.multiRemove(["user-token", "user", "favourites"]);
+        await AsyncStorage.multiRemove(["user-token", "user", "favourites", "orders"]);
         router.replace("/(auth)/welcome");
       } else {
         throw new Error(data.message);

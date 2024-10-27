@@ -11,12 +11,13 @@ export const checkAuthState = async () => {
 };
 
 // store data to local storage
-export const storeData = async (token: string, userData: object, favs: string) => {
+export const storeData = async (token: string, userData: object, favs: string, orders: string) => {
   try {
     await AsyncStorage.setItem("user-token", token);
     await AsyncStorage.setItem("user", JSON.stringify(userData));
     await AsyncStorage.setItem("favourites", JSON.stringify(favs));
-  } catch (error) {
-    console.warn(error);
+    await AsyncStorage.setItem("orders", JSON.stringify(orders));
+  } catch (error: any) {
+    console.warn("error storing to local storage: ", error.message);
   }
 };

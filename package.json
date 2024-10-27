@@ -55,6 +55,7 @@
     "react-native-webview": "13.8.6",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
+    "ws": "^8.18.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

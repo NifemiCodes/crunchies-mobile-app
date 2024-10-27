@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
 import { realUserSchema } from "./../../validations/signInForm";
+import { setOrders } from "@/features/ordersSlice";
 
 const signIn = () => {
   const [loading, setLoading] = useState(false);
@@ -28,13 +29,14 @@ const signIn = () => {
       const data = await res.json();
 
       if (data.status === "OK") {
-        const { token, userInfo, userFavourites } = data;
+        const { token, userInfo, userFavourites, userOrders } = data;
         // store data
-        await storeData(token, userInfo, userFavourites);
+        await storeData(token, userInfo, userFavourites, userOrders);
 
         // update global state
         dispatch(setUser(userInfo));
         dispatch(setFavourites(userFavourites));
+        dispatch(setOrders(userOrders));
 
         setLoading(false);
         router.replace("/(tabs)/");
@@ -80,11 +82,11 @@ const signIn = () => {
                 errorText={props.errors.password}
               />
 
-              {/* <Link> */}
-              <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
-                <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
-              </TouchableOpacity>
-              {/* </Link> */}
+              <Link href={"/(auth)/forgotPassword"} asChild push>
+                <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
+                  <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
+                </TouchableOpacity>
+              </Link>
 
               <CustomButton text="Sign In" btnFunction={props.handleSubmit} isLoading={loading} />
             </View>

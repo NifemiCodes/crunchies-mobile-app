@@ -17,6 +17,7 @@ import { setFavourites } from "@/features/favouritesSlice";
 import { baseURL, RootState, UserLocation } from "../_layout";
 import NetInfo from "@react-native-community/netinfo";
 import * as ExpoLocation from "expo-location";
+import { setOrders } from "@/features/ordersSlice";
 
 // backdrop blur -- X
 // drop shadow -- X
@@ -43,13 +44,16 @@ const homeTab = () => {
       try {
         const user = await AsyncStorage.getItem("user");
         const favs = await AsyncStorage.getItem("favourites");
+        const orders = await AsyncStorage.getItem("orders");
         const parsedUser = user && JSON.parse(user);
         const parsedFavs = favs && JSON.parse(favs);
+        const parsedOrders = orders && JSON.parse(orders);
 
         // set global state
         if (user) {
           dispatch(setUser(parsedUser));
           dispatch(setFavourites(parsedFavs));
+          dispatch(setOrders(parsedOrders));
         }
 
         // get user's location permission

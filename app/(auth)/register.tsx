@@ -13,7 +13,7 @@ import { setUser } from "@/features/userSlice";
 import { setFavourites } from "@/features/favouritesSlice";
 import { newUserSchema } from "./../../validations/registerForm";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { date } from "yup";
+import { setOrders } from "@/features/ordersSlice";
 
 const register = () => {
   const [showPicker, setShowPicker] = useState(false);
@@ -22,7 +22,7 @@ const register = () => {
   const dispatch = useDispatch();
 
   const togglePicker = () => {
-    setShowPicker(prev => !prev);
+    setShowPicker((prev) => !prev);
   };
 
   const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
@@ -44,16 +44,16 @@ const register = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(inputData),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.status === "OK") {
-          const { token, userInfo, userFavourites } = data;
-          console.log("user favs: ", userFavourites);
+          const { token, userInfo, userFavourites, userOrders } = data;
           // store in local storage
-          storeData(token, userInfo, userFavourites);
+          storeData(token, userInfo, userFavourites, userOrders);
           // update global state
           dispatch(setUser(userInfo));
           dispatch(setFavourites(userFavourites));
+          dispatch(setOrders(userOrders));
           setLoading(false);
           router.replace("/(tabs)/");
         } else {
@@ -61,7 +61,7 @@ const register = () => {
           Alert.alert("Registration failed", data.message);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false);
         console.log(err);
         Alert.alert("Error registering user", err.message);
@@ -76,11 +76,11 @@ const register = () => {
         <Formik
           initialValues={{ name: "", email: "", password: "" }}
           validationSchema={newUserSchema}
-          onSubmit={async values => {
+          onSubmit={async (values) => {
             const result = await newUserSchema.isValid(values);
             result ? handleRegister(values) : Alert.alert("Wrong or missing data", "Please fill in the form correctly");
           }}>
-          {props => (
+          {(props) => (
             <View>
               {/* name */}
               <AuthInput

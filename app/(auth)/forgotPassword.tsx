@@ -7,11 +7,14 @@ import CustomButton from "@/components/CustomButton";
 import { baseURL } from "../_layout";
 import { router } from "expo-router";
 import HeaderWithBack from "@/components/HeaderWithBack";
+import { useDispatch } from "react-redux";
+import { setPasswordEmail } from "@/features/passwordSlice";
 
 const forgotPassword = () => {
   const [userEmail, setUserEmail] = useState("");
   const [errorText, setErrorText] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -21,6 +24,7 @@ const forgotPassword = () => {
     const result = await schema.isValid({ email: userEmail });
     if (result) {
       setErrorText("");
+      dispatch(setPasswordEmail(userEmail));
       sendOTP();
     } else {
       setErrorText("please enter a valid email");
@@ -38,7 +42,7 @@ const forgotPassword = () => {
 
       const data = await res.json();
       if (data.status === "OK") {
-        router.replace("/(auth)/continueWithPhone");
+        router.replace("/(auth)/enterOTP");
       } else {
         throw new Error(data.message);
       }
@@ -47,13 +51,15 @@ const forgotPassword = () => {
     }
     setLoading(false);
   };
+
   return (
-    <SafeAreaView className="bg-white px-5 pt-5">
+    <SafeAreaView className="bg-white flex-1 px-5 pt-5">
       <HeaderWithBack headerText="Forgot Password" />
-      <View className="mt-5">
+      <Text className="font-dm text-[16px] opacity-60 leading-6 mt-5 mb-[30px]">Please enter your email below to receive your OTP code</Text>
+      <View>
         <AuthInput
           labelTitle="Email Address"
-          placeholderText="Enter your email"
+          placeholderText="Enter your Email"
           inputIcon={require("../../assets/images/input-email-image.png")}
           type="email"
           boardType="email-address"

@@ -15,7 +15,7 @@ app.use(express.json());
 
 // database
 mongoose
-  .connect("mongodb://localhost:27017/crunchies")
+  .connect(process.env.DB_CONN_STR)
   .then(() => console.log("connected to db successfully"))
   .catch((error) => {
     console.log("error connecting to database:", error.message);
@@ -154,48 +154,86 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-// forgot password
-app.post("/password/forgot", async (req, res) => {
-  const { userEmail } = req.body;
-  try {
-    const genNumbers = [];
-    const maxDigits = 6;
-    for (let i = 0; i < maxDigits; i++) {
-      const num = Math.floor(Math.random() * 9);
-      genNumbers.push(num);
-    }
-    const code = genNumbers.join("");
-    console.log(code);
+// set new password
+// app.post("/password/set", async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const foundUser = await user.findOne({ email: email });
+//     if (foundUser) {
+//       const hashedPassword = await bcrypt.hash(password, 10);
+//       const updateRes = await user.updateOne({ email: email }, { password: hashedPassword });
+//       console.log(updateRes);
 
-    // send code to email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MY_EMAIL,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+//       if (updateRes.modifiedCount === 1) {
+//         res.json({ status: "OK" });
+//       } else {
+//         throw new Error("Failed to update password");
+//       }
+//     } else {
+//       throw new Error("User not found");
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//     res.json({ status: "ERROR", message: error.message });
+//   }
+// });
 
-    const mailOptions = {
-      from: "support@crunchiesclone.com",
-      to: userEmail,
-      subject: "Forgot Password - Crunchies",
-      text: `Enter the code below to reset your password:\n\n ${code}`,
-    };
+// let OTPCode;
+// // forgot password
+// app.post("/password/forgot", async (req, res) => {
+//   const { userEmail } = req.body;
+//   try {
+//     const genNumbers = [];
+//     const maxDigits = 6;
+//     for (let i = 0; i < maxDigits; i++) {
+//       const num = Math.floor(Math.random() * 9);
+//       genNumbers.push(num);
+//     }
+//     OTPCode = genNumbers.join("");
+//     console.log(OTPCode);
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        res.json({ status: "ERROR", message: error.message });
-        console.log("error sending email", error.message);
-      } else {
-        res.json({ status: "OK", message: info.response });
-        console.log("email sent.", info.response);
-      }
-    });
-  } catch (error) {
-    res.json({ status: "ERROR", message: error.message });
-  }
-});
+//     // send code to email
+//     const transporter = nodemailer.createTransport({
+//       service: "gmail",
+//       auth: {
+//         user: process.env.MY_EMAIL,
+//         pass: process.env.EMAIL_PASS,
+//       },
+//     });
+
+//     const mailOptions = {
+//       from: "support@crunchiesclone.com",
+//       to: userEmail,
+//       subject: "Forgot Password - Crunchies",
+//       text: `Enter the code below to reset your password:\n\n ${OTPCode}`,
+//     };
+
+//     transporter.sendMail(mailOptions, (error, info) => {
+//       if (error) {
+//         res.json({ status: "ERROR", message: error.message });
+//         console.log("error sending email", error.message);
+//       } else {
+//         res.json({ status: "OK", message: info.response });
+//         console.log("email sent.", info.response);
+//       }
+//     });
+//   } catch (error) {
+//     res.json({ status: "ERROR", message: error.message });
+//   }
+// });
+
+// // verify OTP
+// app.get("/otp/verify/:OTP", (req, res) => {
+//   const userOTP = req.params.OTP;
+//   console.log("user:", userOTP, "  Code:", OTPCode);
+//   const result = userOTP === OTPCode;
+//   console.log(result);
+//   if (result) {
+//     res.json({ status: "OK" });
+//   } else {
+//     res.json({ status: "ERROR", message: "Wrong password" });
+//   }
+// });
 
 // get user info
 app.get("/user/:id", async (req, res) => {

@@ -26,6 +26,8 @@ module.exports = {
         dm: "DM-reg",
         dmb: "DM-bold",
         dmMed: "DM-med",
+        man: "Manrope-reg",
+        manMed: "Manrope-med"
       },
       dropShadow: {
         checkout: "0px 3px 8px rgba(0, 0, 0, 0.05)",

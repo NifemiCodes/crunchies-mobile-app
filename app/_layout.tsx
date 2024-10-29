@@ -9,6 +9,7 @@ import favouritesReducer from "../features/favouritesSlice";
 import cartReducer from "../features/cartSlice";
 import checkoutReducer from "../features/checkoutSlice";
 import ordersReducer from "../features/ordersSlice";
+import passwordReducer from "../features/passwordSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -18,9 +19,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // get correct facebook icon for welcome screen sign in option;
 // get default profile picture for profile screen;
 
-//export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
-export const baseURL = "http://192.168.43.103:3000";
-export const wsURL = "ws://192.168.43.103:8080";
+export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
+export const wsURL = process.env.EXPO_PUBLIC_WS_URL;
 
 export interface Card {
   image: any;
@@ -59,6 +59,7 @@ const store = configureStore({
     cart: cartReducer,
     checkout: checkoutReducer,
     orders: ordersReducer,
+    password: passwordReducer,
   },
 });
 export type AppStore = typeof store;
@@ -87,6 +88,8 @@ export default function RootLayout() {
     "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
     "DM-med": require("../assets/fonts/DMSans_18pt-Medium.ttf"),
     "DM-bold": require("../assets/fonts/DMSans_18pt-Bold.ttf"),
+    "Manrope-reg": require("../assets/fonts/Manrope-Regular.ttf"),
+    "Manrope-med": require("../assets/fonts/Manrope-Medium.ttf"),
   });
 
   useEffect(() => {

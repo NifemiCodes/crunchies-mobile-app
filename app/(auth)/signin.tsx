@@ -82,11 +82,11 @@ const signIn = () => {
                 errorText={props.errors.password}
               />
 
-              <Link href={"/(auth)/forgotPassword"} asChild push>
-                <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
-                  <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
-                </TouchableOpacity>
-              </Link>
+              {/* <Link href={"/(auth)/forgotPassword"} asChild replace> */}
+              <TouchableOpacity className="self-end mt-[-9px] mb-[40px]">
+                <Text className="text-grey font-dm text-[14px]">Forgot Password</Text>
+              </TouchableOpacity>
+              {/* </Link> */}
 
               <CustomButton text="Sign In" btnFunction={props.handleSubmit} isLoading={loading} />
             </View>

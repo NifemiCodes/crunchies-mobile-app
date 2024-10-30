@@ -39,7 +39,6 @@ const checkout = () => {
   }, []);
 
   useEffect(() => {
-    console.log(websocket);
     if (websocket) {
       websocket.onopen = () => {
         console.log("connection open");

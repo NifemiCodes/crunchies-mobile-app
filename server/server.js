@@ -317,8 +317,6 @@ app.post("/setFavourites", async (req, res) => {
     const response = await user.updateOne({ _id: uid }, { favourites: favourites }).exec();
     if (response.modifiedCount === 1) {
       res.json({ status: "OK" });
-    } else {
-      console.warn("error updating user");
     }
   } catch (error) {
     res.json({ status: "ERROR", message: error.message });

@@ -33,9 +33,12 @@ const checkout = () => {
   const cancelUrl = "myapp://cart";
 
   useEffect(() => {
-    const websocket = new WebSocket(wsURL || "");
-    setWebsocket(websocket);
-    return () => websocket.close();
+    const ws = new WebSocket(wsURL || "");
+    ws.onopen = () => {
+      console.log("web socket connection open");
+    };
+    setWebsocket(ws);
+    return () => ws.close();
   }, []);
 
   if (websocket) {

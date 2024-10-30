@@ -23,7 +23,7 @@ mongoose
   });
 
 // websocket
-const webSocketServer = new ws.Server({ port: 443 });
+const webSocketServer = new ws.Server({ port: PORT });
 webSocketServer.on("connection", () => {
   console.log("wss connection");
 });

@@ -21,7 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const baseURL = process.env.EXPO_PUBLIC_BASE_URL;
 export const wsURL = process.env.EXPO_PUBLIC_WS_URL;
-//export const wsURL = "ws://localhost:443";
 
 export interface Card {
   image: any;

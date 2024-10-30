@@ -87,13 +87,13 @@ app.post("/paystack-webhook", (req, res) => {
     });
   }
 
+  res.status(200).send("OK");
+
   // send payment status to frontend
   const wsc = Array.from(webSocketServer.clients);
   if (wsc[0].readyState === ws.OPEN) {
     wsc[0].send(JSON.stringify({ paymentStatus: event.data.status }));
   }
-
-  res.status(200).send("OK");
 });
 
 /** API ROUTES */

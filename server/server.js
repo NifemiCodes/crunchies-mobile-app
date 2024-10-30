@@ -1,4 +1,5 @@
 const express = require("express");
+const http = require("http");
 const mongoose = require("mongoose");
 const user = require("./models/user");
 const bcrypt = require("bcrypt");
@@ -9,6 +10,7 @@ require("dotenv").config();
 const ws = require("ws");
 
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 // middleware
@@ -23,13 +25,12 @@ mongoose
   });
 
 // websocket
-const webSocketServer = new ws.Server({ port: 443 });
+const webSocketServer = new ws.Server({ server: server });
 webSocketServer.on("connection", () => {
-  console.log("wss connection");
+  console.log("client connected");
 });
-
 webSocketServer.on("listening", () => {
-  console.log("wss is listening on port 443");
+  console.log(`wss is listening on port ${PORT}`);
 });
 
 /** Payment Routes */
@@ -357,6 +358,6 @@ app.delete("/user/delete", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

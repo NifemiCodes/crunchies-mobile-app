@@ -33,20 +33,32 @@ const checkout = () => {
   const cancelUrl = "myapp://cart";
 
   useEffect(() => {
-    const ws = new WebSocket(wsURL || "");
-    ws.onopen = () => {
-      console.log("web socket connection open");
-    };
+    const ws = new WebSocket("wss://crunchies-mobile-app.onrender.com");
     setWebsocket(ws);
     return () => ws.close();
   }, []);
 
-  if (websocket) {
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setPaymentStatus(data.paymentStatus);
-    };
-  }
+  useEffect(() => {
+    console.log(websocket);
+    if (websocket) {
+      websocket.onopen = () => {
+        console.log("connection open");
+      };
+
+      websocket.onerror = (event) => {
+        console.log("websocket error:", event);
+      };
+
+      websocket.onclose = () => {
+        console.log("connection closed");
+      };
+
+      websocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setPaymentStatus(data.paymentStatus);
+      };
+    }
+  }, [websocket]);
 
   const initialzePayment = async () => {
     setLoading(true);

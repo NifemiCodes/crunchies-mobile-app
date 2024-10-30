@@ -33,7 +33,7 @@ const checkout = () => {
   const cancelUrl = "myapp://cart";
 
   useEffect(() => {
-    const ws = new WebSocket("wss://crunchies-mobile-app.onrender.com");
+    const ws = new WebSocket(wsURL || "");
     setWebsocket(ws);
     return () => ws.close();
   }, []);

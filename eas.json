@@ -13,12 +13,14 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BASE_URL": "https://crunchies-mobile-app.onrender.com"
+        "EXPO_PUBLIC_BASE_URL": "https://crunchies-mobile-app.onrender.com",
+        "EXPO_PUBLIC_WS_URL": "wss://crunchies-mobile-app.onrender.com"
       }
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_BASE_URL": "https://crunchies-mobile-app.onrender.com"
+        "EXPO_PUBLIC_BASE_URL": "https://crunchies-mobile-app.onrender.com",
+        "EXPO_PUBLIC_WS_URL": "wss://crunchies-mobile-app.onrender.com"
       }
     }
   },

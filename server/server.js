@@ -22,13 +22,13 @@ mongoose
   });
 
 // websocket
-const webSocketServer = new ws.Server({ port: 8080 });
+const webSocketServer = new ws.Server({ port: 443 });
 webSocketServer.on("connection", () => {
   console.log("wss connection");
 });
 
 webSocketServer.on("listening", () => {
-  console.log("wss is listening on port 8080");
+  console.log("wss is listening on port 443");
 });
 
 /** Payment Routes */

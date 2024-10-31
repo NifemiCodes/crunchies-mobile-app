@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { View, Text } from "react-native";
+import { useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -69,21 +70,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
-
-  useLayoutEffect(() => {
-    const checkFirstLaunch = async () => {
-      const hasLaunched = await AsyncStorage.getItem("has-launched");
-      console.log(hasLaunched);
-      if (hasLaunched === null) {
-        setIsFirstLaunch(true);
-        await AsyncStorage.setItem("has-launched", "true");
-      } else {
-        setIsFirstLaunch(false);
-      }
-    };
-    checkFirstLaunch();
-  }, []);
-
+  const [loading, setLoading] = useState(true);
   const [loaded] = useFonts({
     "DM-reg": require("../assets/fonts/DMSans_18pt-Regular.ttf"),
     "DM-med": require("../assets/fonts/DMSans_18pt-Medium.ttf"),
@@ -93,16 +80,27 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded) {
+    const checkFirstLaunch = async () => {
+      const hasLaunched = await AsyncStorage.getItem("has-launched");
+      if (hasLaunched === null) {
+        setIsFirstLaunch(true);
+        await AsyncStorage.setItem("has-launched", "true");
+      } else {
+        setIsFirstLaunch(false);
+      }
+      setLoading(false);
+    };
+    checkFirstLaunch();
+  }, []);
+
+  useEffect(() => {
+    if (loaded && !loading) {
+      console.log(isFirstLaunch);
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, loading]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  if (isFirstLaunch === null) {
+  if (!loaded || loading) {
     return null;
   }
 
